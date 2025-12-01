@@ -1,4 +1,4 @@
-# ESP32_SpaceNode - Instrucciones para el agente de código AI
+# Página_web_SpaceNode - Instrucciones para el agente de código AI
 
 Siempre responder en español.
 
