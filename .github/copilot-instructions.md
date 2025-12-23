@@ -1,6 +1,6 @@
 # Página_web_SpaceNode - Instrucciones para el agente de código AI
 
-Siempre responder en español.
+Siempre responder en español. Pero como estoy aprediendo a comunicarme en inglés, de vez en cuando ayudame a practicarlo de la manera que se te ocurra.
 
 Comentarios de código deben estar en español. Solo comentarios necesarios para clarificar lógica compleja.
 
