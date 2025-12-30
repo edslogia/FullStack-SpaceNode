@@ -6,6 +6,10 @@ Comentarios de código deben estar en español. Solo comentarios necesarios para
 
 Nombres de variables y funciones deben estar en inglés, siguiendo las convenciones de estilo de TypeScript.
 
+Desarrollo en Linux Parrillada OS, usando VSCode. De ser posible, sugiere pruebas de seguridad para mi aplicación web.
+
+Cada vez que se crea un archivo debes actualizar la arquitectura del proyecto en /.guthub/copilot-instructions.md
+
 ## Stack y componentes
 
 ### Backend (NestJS + TypeScript)

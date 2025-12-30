@@ -30,6 +30,9 @@ services:
     image: emqx/emqx:latest
     container_name: spacenode-emqx
     restart: always
+    environment:
+      EMQX_DASHBOARD__DEFAULT_USER__USERNAME: ${EMQX_DASHBOARD__DEFAULT_USER__USERNAME}
+      EMQX_DASHBOARD__DEFAULT_USER__PASSWORD: ${EMQX_DASHBOARD__DEFAULT_USER__PASSWORD}
     ports:
       - "1883:1883"    # MQTT
       - "18083:18083"  # Dashboard EMQX
