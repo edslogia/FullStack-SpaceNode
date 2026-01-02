@@ -28,14 +28,6 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
           <div className="flex gap-4 items-center">
-            {!user && (
-              <Link
-                to="/"
-                className={`text-sm font-medium px-3 py-2 rounded transition hover:bg-background hover:text-accent-blue ${location.pathname === "/" ? "text-accent-blue" : "text-gray-100"}`}
-              >
-                Dashboard público
-              </Link>
-            )}
             {user && user.role === 'ADMIN' && (
               <Link
                 to="/dashboard-admin"
@@ -55,7 +47,7 @@ const Navbar: React.FC = () => {
             {!user && (
               <Link
                 to="/login"
-                className={`text-sm font-medium px-3 py-2 rounded transition hover:bg-background hover:text-accent-purple ${location.pathname === "/login" ? "text-accent-purple" : "text-gray-100"}`}
+                className="inline-flex items-center px-6 py-2 bg-gradient-to-r from-accent-blue to-accent-purple hover:from-accent-purple hover:to-accent-blue font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 !text-white"
               >
                 Iniciar sesión
               </Link>
