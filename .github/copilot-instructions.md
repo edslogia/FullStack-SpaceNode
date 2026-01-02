@@ -10,6 +10,10 @@ Desarrollo en Linux Parrillada OS, usando VSCode. De ser posible, sugiere prueba
 
 Cada vez que se crea un archivo debes actualizar la arquitectura del proyecto en /.guthub/copilot-instructions.md
 
+No escribas código en el chat a menos que se te solicite.
+
+Usa los themes y plugins que estan en tailwind.config.js para los componentes frontend.
+
 ## Habilidades del desarrollador
 
 - Python, JavaScript, C++, HTML, Bootstrap, React, Express, Node.js, WebSockets programación de microcontroladores, MongoDB, SQL (ESP32, ESP 8266)
@@ -27,6 +31,10 @@ Cada vez que se crea un archivo debes actualizar la arquitectura del proyecto en
 ## Frontend
 
 - React + TypeScript + Vite + TailwindCSS, ya corre
+- Plugins de TailwindCSS instalados y configurados: forms
+- React Router configurado para navegación
+- Dashboard público creado (landing page)
+- Página de login con @tailwindcss/forms
 
 ## Infraestructura
 
@@ -126,6 +134,12 @@ FullStack-SpaceNode/
 │   │   ├── App.tsx                   # Componente raíz
 │   │   ├── App.css                   # Estilos del componente App
 │   │   ├── index.css                 # Estilos globales + Tailwind
+│   │   ├── pages/                    # Páginas (vistas completas)
+│   │   │   ├── PublicDashboard.tsx   # Dashboard público (landing page)
+│   │   │   └── Login.tsx             # Página de autenticación
+│   │   ├── components/               # Componentes reutilizables
+│   │   │   ├── Button.tsx            # Botón con variantes (primary, secondary, danger)
+│   │   │   └── Input.tsx             # Input con label y manejo de errores
 │   │   └── assets/                   # Recursos estáticos
 │   │       └── react.svg
 │   ├── public/                       # Assets públicos
@@ -168,13 +182,18 @@ FullStack-SpaceNode/
 
 **Frontend:**
 - ✅ Estructura base React + Vite configurada
-- ✅ TailwindCSS configurado
+- ✅ TailwindCSS configurado (plugin forms activo)
 - ✅ Configuración dual de TypeScript (bundler + node) para desarrollo
-- ⏳ Componentes de UI pendientes
+- ✅ React Router instalado y configurado
+- ✅ Dashboard público creado (PublicDashboard.tsx)
+- ✅ Página de login creada (usa @tailwindcss/forms)
+- ✅ Componentes reutilizables: Button, Input
 - ⏳ WebSocket client pendiente
 - ⏳ Cliente API REST pendiente
-- ⏳ Sistema de autenticación pendiente
-- ⏳ Dashboard y gráficas pendientes
+- ⏳ Sistema de autenticación JWT pendiente
+- ⏳ Dashboard privado pendiente
+- ⏳ Protección de rutas (PrivateRoute) pendiente
+- ⏳ Gráficas de telemetría pendientes
 
 **Infraestructura:**
 - ✅ Docker Compose configurado

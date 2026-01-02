@@ -11,9 +11,9 @@ module.exports = {
         background: "#1e1e1e",
         surface: "#252526",
         accent: {
-          green: "#4EC9B0",
-          purple: "#C586C0",
-          blue: "#569CD6",
+          green: "#183504ff",
+          purple: "#360933ff",
+          blue: "#012e53ff",
         },
         gray: {
           100: "#d4d4d4",
