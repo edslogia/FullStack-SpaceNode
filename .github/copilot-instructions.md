@@ -12,10 +12,25 @@ Cada vez que se crea un archivo debes actualizar la arquitectura del proyecto en
 
 ## Habilidades del desarrollador
 
-###
-
 - Python, JavaScript, C++, HTML, Bootstrap, React, Express, Node.js, WebSockets programación de microcontroladores, MongoDB, SQL (ESP32, ESP 8266)
 - Este proyecto es para aprender: NestJS, TypeScript, MQTT, Prisma, TimescaleDB, Docker, Vite, TailwindCSS 
+
+## Ruta de lo que se ha implmentado en el proyecto
+
+## Backend
+
+- NestJS + TypeScript, ya corre
+- Se conecta con EMQX via MQTT, e imprime en consola los mensajes recibidos
+- Estructura modular básica creada
+- Prisma instalado, pero no configurado
+
+## Frontend
+
+- React + TypeScript + Vite + TailwindCSS, ya corre
+
+## Infraestructura
+
+- Docker Compose con EMQX, TimescaleDB, PGAdmin
 
 ## Stack y componentes
 
