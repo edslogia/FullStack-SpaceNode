@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+
+type LoginStep = 'login' | 'change-password';
 
 interface LoginFormState {
   email: string;
@@ -8,7 +11,14 @@ interface LoginFormState {
   loading: boolean;
 }
 
-// Iconos SVG profesionales
+interface ChangePasswordFormState {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+  error: string | null;
+  loading: boolean;
+}
+
 const IconLock: React.FC<{ className?: string }> = ({ className }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -21,12 +31,6 @@ const IconMail: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
-const IconShield: React.FC<{ className?: string }> = ({ className }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-  </svg>
-);
-
 const IconAlert: React.FC<{ className?: string }> = ({ className }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -34,190 +38,265 @@ const IconAlert: React.FC<{ className?: string }> = ({ className }) => (
 );
 
 const Login: React.FC = () => {
-  const [form, setForm] = useState<LoginFormState>({
-    email: "",
-    password: "",
+  const navigate = useNavigate();
+  const { login, user, changePassword } = useAuth();
+  const [step, setStep] = useState<LoginStep>('login');
+
+  // Estados
+  const [loginForm, setLoginForm] = useState<LoginFormState>({
+    email: '',
+    password: '',
     error: null,
     loading: false,
   });
 
-  // Maneja cambios en los campos del formulario
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value, error: null });
+  const [passwordForm, setPasswordForm] = useState<ChangePasswordFormState>({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+    error: null,
+    loading: false,
+  });
+
+  // Login
+  const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLoginForm({ ...loginForm, [e.target.name]: e.target.value, error: null });
   };
 
-  // Envía el formulario de login
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setForm((f) => ({ ...f, loading: true, error: null }));
+    setLoginForm((f) => ({ ...f, loading: true, error: null }));
 
-    // Validación simple (puedes mejorarla con Zod)
-    if (!form.email || !form.password) {
-      setForm((f) => ({
+    if (!loginForm.email || !loginForm.password) {
+      setLoginForm((f) => ({
         ...f,
-        error: "Por favor, completa todos los campos.",
+        error: 'Por favor, completa todos los campos.',
         loading: false,
       }));
       return;
     }
 
     try {
-      // Aquí deberías llamar a tu API real
-      // const res = await fetch("/api/v1/auth/login", { ... })
-      // Simulación de login exitoso
-      if (form.email === "admin@spacenode.com" && form.password === "1234") {
-        alert("Login exitoso (simulado)");
-        // Redirigir o guardar token aquí
+      const loggedInUser = await login(loginForm.email, loginForm.password);
+      
+      // Verificar si requiere cambio de contraseña obligatorio en primer login
+      if (loggedInUser.firstLoginPasswordChange) {
+        setStep('change-password');
       } else {
-        setForm((f) => ({
-          ...f,
-          error: "Credenciales incorrectas.",
-          loading: false,
-        }));
+        navigate('/dashboard');
       }
-    } catch (err) {
-      setForm((f) => ({
+    } catch (err: any) {
+      setLoginForm((f) => ({
         ...f,
-        error: "Error de red o servidor.",
+        error: err.message || 'Error al iniciar sesión.',
+        loading: false,
+      }));
+    }
+  };
+
+  // Cambio de contraseña
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordForm({ ...passwordForm, [e.target.name]: e.target.value, error: null });
+  };
+
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordForm((f) => ({ ...f, loading: true, error: null }));
+
+    if (!passwordForm.currentPassword || !passwordForm.newPassword || !passwordForm.confirmPassword) {
+      setPasswordForm((f) => ({
+        ...f,
+        error: 'Por favor, completa todos los campos.',
+        loading: false,
+      }));
+      return;
+    }
+
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      setPasswordForm((f) => ({
+        ...f,
+        error: 'Las contraseñas no coinciden.',
+        loading: false,
+      }));
+      return;
+    }
+
+    if (passwordForm.newPassword.length < 8) {
+      setPasswordForm((f) => ({
+        ...f,
+        error: 'La contraseña debe tener al menos 8 caracteres.',
+        loading: false,
+      }));
+      return;
+    }
+
+    try {
+      await changePassword(
+        passwordForm.currentPassword,
+        passwordForm.newPassword,
+        passwordForm.confirmPassword
+      );
+      navigate('/dashboard');
+    } catch (err: any) {
+      setPasswordForm((f) => ({
+        ...f,
+        error: err.message || 'Error al cambiar contraseña.',
         loading: false,
       }));
     }
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden">
-      {/* Gradiente de fondo animado */}
-      <div className="absolute inset-0 bg-gradient-to-br from-accent-blue/5 via-accent-purple/5 to-accent-green/5 animate-pulse" style={{ animationDuration: '8s' }}></div>
-      
-      {/* Grid decorativo de fondo */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
-
-      <div className="relative w-full max-w-md mx-4">
-        {/* Tarjeta de login */}
-        <div className="bg-surface border border-gray-800 rounded-2xl shadow-2xl p-8 backdrop-blur-sm">
-          {/* Header con branding */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-accent-blue to-accent-purple rounded-2xl mb-4 shadow-lg shadow-accent-blue/20">
-              <IconLock className="w-8 h-8 text-white" />
-            </div>
-            <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-accent-blue via-accent-purple to-accent-green mb-2">
-              SpaceNode
-            </h1>
-            <p className="text-gray-400 text-sm">Portal de Autenticación</p>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8">
+        {/* Header */}
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-lg shadow-lg mb-4">
+            <IconLock className="w-8 h-8 text-white" />
           </div>
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">SpaceNode</h2>
+          <p className="mt-2 text-gray-600">
+            {step === 'login' ? 'Inicia sesión en tu cuenta' : 'Cambia tu contraseña'}
+          </p>
+        </div>
 
-          {/* Badge de seguridad */}
-          <div className="flex items-center justify-center gap-2 mb-6 px-4 py-2 bg-accent-green/10 border border-accent-green/30 rounded-lg">
-            <IconShield className="w-4 h-4 text-accent-green" />
-            <span className="text-xs text-accent-green font-medium">Conexión cifrada JWT + Argon2</span>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Campo Email */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-300 mb-2">
-                Correo electrónico
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <IconMail className="w-5 h-5 text-gray-500" />
-                </div>
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="admin@spacenode.com"
-                  className="block w-full pl-10 pr-3 py-3 bg-background border border-gray-800 rounded-lg text-gray-100 placeholder-gray-600 focus:outline-none focus:border-accent-blue focus:ring-2 focus:ring-accent-blue/50 transition-all"
-                  value={form.email}
-                  onChange={handleChange}
-                  autoComplete="username"
-                />
-              </div>
-            </div>
-
-            {/* Campo Password */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-300 mb-2">
-                Contraseña
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <IconLock className="w-5 h-5 text-gray-500" />
-                </div>
-                <input
-                  id="password"
-                  type="password"
-                  name="password"
-                  placeholder="••••••••"
-                  className="block w-full pl-10 pr-3 py-3 bg-background border border-gray-800 rounded-lg text-gray-100 placeholder-gray-600 focus:outline-none focus:border-accent-purple focus:ring-2 focus:ring-accent-purple/50 transition-all"
-                  value={form.password}
-                  onChange={handleChange}
-                  autoComplete="current-password"
-                />
-              </div>
-            </div>
-
-            {/* Mensaje de error */}
-            {form.error && (
-              <div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
-                <IconAlert className="w-5 h-5 text-red-400 flex-shrink-0" />
-                <p className="text-sm text-red-400">{form.error}</p>
+        {/* Formulario */}
+        {step === 'login' ? (
+          // Login Form
+          <form className="space-y-6" onSubmit={handleLoginSubmit}>
+            {loginForm.error && (
+              <div className="rounded-md bg-red-50 border border-red-200 p-4 flex gap-3">
+                <IconAlert className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-700">{loginForm.error}</p>
               </div>
             )}
 
-            {/* Botón de submit */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                Email
+              </label>
+              <div className="relative">
+                <IconMail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="admin@spacenode.com"
+                  value={loginForm.email}
+                  onChange={handleLoginChange}
+                  disabled={loginForm.loading}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                Contraseña
+              </label>
+              <div className="relative">
+                <IconLock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="••••••••"
+                  value={loginForm.password}
+                  onChange={handleLoginChange}
+                  disabled={loginForm.loading}
+                />
+              </div>
+            </div>
+
             <button
               type="submit"
-              disabled={form.loading}
-              className="group relative w-full px-6 py-3 text-base font-semibold text-white bg-gradient-to-r from-accent-blue to-accent-purple rounded-lg hover:shadow-lg hover:shadow-accent-purple/50 transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              disabled={loginForm.loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors"
             >
-              <span className="relative z-10 flex items-center justify-center">
-                {form.loading ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Autenticando...
-                  </>
-                ) : (
-                  <>
-                    Iniciar Sesión
-                    <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </>
-                )}
-              </span>
+              {loginForm.loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
             </button>
-
-            {/* Credenciales de demo */}
-            <div className="mt-4 p-4 bg-accent-blue/10 border border-accent-blue/30 rounded-lg">
-              <p className="text-xs text-gray-400 text-center mb-2">Credenciales de prueba:</p>
-              <p className="text-xs text-accent-blue text-center font-mono">admin@spacenode.com / 1234</p>
-            </div>
           </form>
+        ) : (
+          // Change Password Form
+          <form className="space-y-6" onSubmit={handlePasswordSubmit}>
+            {passwordForm.error && (
+              <div className="rounded-md bg-red-50 border border-red-200 p-4 flex gap-3">
+                <IconAlert className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-700">{passwordForm.error}</p>
+              </div>
+            )}
 
-          {/* Link de regreso */}
-          <div className="mt-8 pt-6 border-t border-gray-800 text-center">
-            <Link
-              to="/"
-              className="inline-flex items-center text-sm text-gray-400 hover:text-accent-blue transition-colors group"
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-sm text-blue-800">
+                <strong>Nota:</strong> Debes cambiar tu contraseña temporal antes de continuar.
+              </p>
+            </div>
+
+            <div>
+              <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                Contraseña actual
+              </label>
+              <input
+                id="currentPassword"
+                name="currentPassword"
+                type="password"
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="••••••••"
+                value={passwordForm.currentPassword}
+                onChange={handlePasswordChange}
+                disabled={passwordForm.loading}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                Nueva contraseña
+              </label>
+              <input
+                id="newPassword"
+                name="newPassword"
+                type="password"
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="••••••••"
+                value={passwordForm.newPassword}
+                onChange={handlePasswordChange}
+                disabled={passwordForm.loading}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                Confirmar contraseña
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="••••••••"
+                value={passwordForm.confirmPassword}
+                onChange={handlePasswordChange}
+                disabled={passwordForm.loading}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={passwordForm.loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors"
             >
-              <svg className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Volver al inicio
-            </Link>
-          </div>
-        </div>
-
-        {/* Footer informativo */}
-        <div className="mt-6 text-center">
-          <p className="text-xs text-gray-600">
-            © 2026 SpaceNode. Protocolo LOGIA WATCHER.
-          </p>
-        </div>
+              {passwordForm.loading ? 'Cambiando contraseña...' : 'Cambiar contraseña'}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );

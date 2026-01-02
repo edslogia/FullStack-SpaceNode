@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enum para roles de usuarios
+enum UserRole {
+  ADMIN
+  OPERATOR
+}
+
+// Modelo User para autenticación y autorización
+model User {
+  id                          String   @id @default(cuid())
+  email                       String   @unique
+  password                    String   // Hash con Argon2
+  role                        UserRole @default(OPERATOR)
+  firstLoginPasswordChange    Boolean  @default(true) // Flag para forzar cambio de contraseña
+  isActive                    Boolean  @default(true)
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+
+  @@index([email])
+  @@map("users")
+}
+
+// Modelo opcional para auditoría de login (recomendado para seguridad)
+model LoginAudit {
+  id        String   @id @default(cuid())
+  userId    String
+  email     String
+  success   Boolean
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@map("login_audits")
+}
