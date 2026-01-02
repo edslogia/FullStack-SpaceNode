@@ -83,7 +83,9 @@ const Login: React.FC = () => {
       if (loggedInUser.firstLoginPasswordChange) {
         setStep('change-password');
       } else {
-        navigate('/dashboard');
+        // Redirigir al dashboard según el rol del usuario
+        const dashboard = loggedInUser.role === 'ADMIN' ? '/dashboard-admin' : '/dashboard-operator';
+        navigate(dashboard);
       }
     } catch (err: any) {
       setLoginForm((f) => ({
@@ -136,7 +138,9 @@ const Login: React.FC = () => {
         passwordForm.newPassword,
         passwordForm.confirmPassword
       );
-      navigate('/dashboard');
+      // Redirigir al dashboard según el rol del usuario
+      const dashboard = user?.role === 'ADMIN' ? '/dashboard-admin' : '/dashboard-operator';
+      navigate(dashboard);
     } catch (err: any) {
       setPasswordForm((f) => ({
         ...f,
@@ -184,7 +188,7 @@ const Login: React.FC = () => {
                   autoComplete="email"
                   required
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="admin@spacenode.com"
+                  placeholder="tu-correo@email.com"
                   value={loginForm.email}
                   onChange={handleLoginChange}
                   disabled={loginForm.loading}

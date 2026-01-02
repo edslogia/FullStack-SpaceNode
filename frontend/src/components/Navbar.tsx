@@ -28,12 +28,30 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
           <div className="flex gap-4 items-center">
-            <Link
-              to="/"
-              className={`text-sm font-medium px-3 py-2 rounded transition hover:bg-background hover:text-accent-blue ${location.pathname === "/" ? "text-accent-blue" : "text-gray-100"}`}
-            >
-              Dashboard público
-            </Link>
+            {!user && (
+              <Link
+                to="/"
+                className={`text-sm font-medium px-3 py-2 rounded transition hover:bg-background hover:text-accent-blue ${location.pathname === "/" ? "text-accent-blue" : "text-gray-100"}`}
+              >
+                Dashboard público
+              </Link>
+            )}
+            {user && user.role === 'ADMIN' && (
+              <Link
+                to="/dashboard-admin"
+                className={`text-sm font-medium px-3 py-2 rounded transition hover:bg-background hover:text-accent-purple ${location.pathname === "/dashboard-admin" ? "text-accent-purple" : "text-gray-100"}`}
+              >
+                Dashboard Admin
+              </Link>
+            )}
+            {user && user.role === 'OPERATOR' && (
+              <Link
+                to="/dashboard-operator"
+                className={`text-sm font-medium px-3 py-2 rounded transition hover:bg-background hover:text-accent-purple ${location.pathname === "/dashboard-operator" ? "text-accent-purple" : "text-gray-100"}`}
+              >
+                Dashboard
+              </Link>
+            )}
             {!user && (
               <Link
                 to="/login"

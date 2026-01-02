@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import PublicDashboard from "./pages/PublicDashboard";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
+import OperatorDashboard from "./pages/OperatorDashboard";
 
 function App() {
   return (
@@ -18,10 +19,18 @@ function App() {
             <Route path="/" element={<PublicDashboard />} />
             <Route path="/login" element={<Login />} />
             <Route
-              path="/dashboard"
+              path="/dashboard-admin"
               element={
                 <PrivateRoute requiredRole="ADMIN">
                   <AdminDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/dashboard-operator"
+              element={
+                <PrivateRoute requiredRole="OPERATOR">
+                  <OperatorDashboard />
                 </PrivateRoute>
               }
             />
