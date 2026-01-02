@@ -196,6 +196,8 @@ FullStack-SpaceNode/
 ├── .env                              # Variables de entorno (gitignored)
 ├── .env.copy                         # Plantilla de variables de entorno
 ├── .gitignore                        # Archivos ignorados por git
+├── package.json                      # Root package.json
+├── package-lock.json
 ├── docker-compose.yml                # Orquestación de contenedores
 │
 ├── backend/                          # API NestJS + MQTT + WebSocket
@@ -205,17 +207,61 @@ FullStack-SpaceNode/
 │   │   ├── app.controller.ts         # Controlador raíz
 │   │   ├── app.service.ts            # Servicio raíz
 │   │   ├── app.controller.spec.ts    # Tests del controlador
+│   │   ├── auth/                     # Módulo de autenticación JWT
+│   │   │   ├── auth.module.ts
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── dtos/
+│   │   │   │   ├── login.dto.ts
+│   │   │   │   ├── create-operator.dto.ts
+│   │   │   │   └── change-password.dto.ts
+│   │   │   ├── guards/
+│   │   │   │   ├── jwt-auth.guard.ts
+│   │   │   │   └── admin-role.guard.ts
+│   │   │   └── strategies/
+│   │   │       └── jwt.strategy.ts
+│   │   ├── users/                    # Módulo de usuarios
+│   │   │   ├── users.module.ts
+│   │   │   ├── users.controller.ts
+│   │   │   └── users.service.ts
+│   │   ├── modules/                  # Módulos de negocio
+│   │   │   ├── health/               # Módulo de health checks
+│   │   │   │   └── dtos/
+│   │   │   ├── metrics/              # Módulo de métricas
+│   │   │   ├── nodes/                # Módulo de nodos
+│   │   │   │   └── dtos/
+│   │   │   ├── sensors/              # Módulo de sensores
+│   │   │   │   └── dtos/
+│   │   │   └── telemetry/            # Módulo de telemetría
+│   │   │       └── dtos/
 │   │   ├── mqtt/                     # Módulo MQTT
 │   │   │   ├── mqtt.module.ts        # Configuración del módulo MQTT
 │   │   │   └── mqtt.service.ts       # Servicio de suscripción MQTT
-│   │   └── prisma/                   # Módulo Prisma (vacío por ahora)
-│   ├── prisma/                       # Configuración de Prisma (vacío)
-│   ├── test/                         # Tests E2E
-│   │   ├── app.e2e-spec.ts
-│   │   └── jest-e2e.json
+│   │   ├── prisma/                   # Módulo Prisma
+│   │   │   ├── prisma.module.ts
+│   │   │   └── prisma.service.ts
+│   │   ├── common/                   # Utilidades compartidas
+│   │   │   ├── decorators/
+│   │   │   ├── filters/
+│   │   │   ├── guards/
+│   │   │   ├── interceptors/
+│   │   │   └── pipes/
+│   │   ├── config/                   # Configuración de la aplicación
+│   │   ├── shared/                   # Servicios compartidos
+│   │   │   ├── logger/               # Logger con Pino
+│   │   │   └── websocket/            # WebSocket Gateway
+│   │   └── test/                     # Tests E2E
+│   │       ├── app.e2e-spec.ts
+│   │       └── jest-e2e.json
+│   ├── prisma/                       # Configuración de Prisma y migraciones
+│   │   ├── schema.prisma             # Schema de BD
+│   │   ├── seed.ts                   # Script de seed
+│   │   └── migrations/               # Migraciones de BD
+│   │       └── 20260102000000_init_auth/
+│   │           └── migration.sql
 │   ├── dist/                         # Build compilado
 │   ├── node_modules/                 # Dependencias npm
-│   ├── package.json                  # Dependencias y scripts
+│   ├── package.json                  # Dependencias y scripts del backend
 │   ├── package-lock.json
 │   ├── tsconfig.json                 # Configuración TypeScript
 │   ├── tsconfig.build.json           # Config de build
@@ -233,17 +279,36 @@ FullStack-SpaceNode/
 │   │   ├── index.css                 # Estilos globales + Tailwind
 │   │   ├── pages/                    # Páginas (vistas completas)
 │   │   │   ├── PublicDashboard.tsx   # Dashboard público (landing page)
-│   │   │   └── Login.tsx             # Página de autenticación
+│   │   │   ├── Login.tsx             # Página de autenticación
+│   │   │   ├── AdminDashboard.tsx    # Dashboard de administrador
+│   │   │   ├── OperatorDashboard.tsx # Dashboard de operadores
+│   │   │   ├── auth/                 # Páginas de autenticación
+│   │   │   ├── dashboards/           # Dashboards específicos
+│   │   │   ├── nodes/                # Páginas de gestión de nodos
+│   │   │   └── settings/             # Páginas de configuración
 │   │   ├── components/               # Componentes reutilizables
-│   │   │   ├── Button.tsx            # Botón con variantes (primary, secondary, danger)
-│   │   │   └── Input.tsx             # Input con label y manejo de errores
-│   │   └── assets/                   # Recursos estáticos
-│   │       └── react.svg
+│   │   │   ├── Button.tsx            # Botón con variantes
+│   │   │   ├── Input.tsx             # Input con label
+│   │   │   ├── Navbar.tsx            # Barra de navegación
+│   │   │   ├── PrivateRoute.tsx      # Protección de rutas
+│   │   │   ├── common/               # Componentes comunes
+│   │   │   ├── forms/                # Componentes de formularios
+│   │   │   ├── nodes/                # Componentes de nodos
+│   │   │   └── telemetry/            # Componentes de telemetría
+│   │   ├── assets/                   # Recursos estáticos
+│   │   │   └── react.svg
+│   │   ├── context/                  # Context API
+│   │   │   └── AuthContext.tsx       # Contexto de autenticación
+│   │   ├── hooks/                    # Custom hooks
+│   │   ├── services/                 # Servicios (API, WebSocket)
+│   │   ├── types/                    # Tipos TypeScript
+│   │   ├── utils/                    # Funciones utilitarias
+│   │   └── constants/                # Constantes de la aplicación
 │   ├── public/                       # Assets públicos
 │   │   └── vite.svg
 │   ├── .vite/                        # Cache de Vite
 │   ├── node_modules/                 # Dependencias npm
-│   ├── package.json                  # Dependencias y scripts
+│   ├── package.json                  # Dependencias y scripts del frontend
 │   ├── package-lock.json
 │   ├── index.html                    # Punto de entrada HTML
 │   ├── vite.config.ts                # Configuración de Vite
@@ -271,11 +336,19 @@ FullStack-SpaceNode/
 **Backend:**
 - ✅ Estructura base NestJS configurada
 - ✅ Módulo MQTT inicializado
-- ✅ Dependencias instaladas: Prisma, MQTT, Pino Logger, class-validator
-- ⏳ Prisma schema pendiente de creación
-- ⏳ WebSocket Gateway pendiente
-- ⏳ API REST pendiente
-- ⏳ Autenticación JWT pendiente
+- ✅ Módulo Prisma configurado con TimescaleDB
+- ✅ Schema Prisma creado y migraciones iniciales
+- ✅ Módulo Auth (JWT + Argon2) implementado
+- ✅ Controlador de autenticación con login
+- ✅ Guardia JWT (JwtAuthGuard) implementada
+- ✅ Guardia RBAC (AdminRoleGuard) implementada
+- ✅ Módulo Users con controlador y servicio
+- ✅ Módulos de negocio: health, metrics, nodes, sensors, telemetry
+- ✅ Dependencias instaladas: Prisma, MQTT, Pino Logger, class-validator, JWT, Argon2
+- ⏳ WebSocket Gateway (tiempo real) pendiente
+- ⏳ Servicio MQTT completo para ingesta de telemetría
+- ⏳ Endpoints REST para gestión de nodos y telemetría
+- ⏳ Health checks y métricas en tiempo real
 
 **Frontend:**
 - ✅ Estructura base React + Vite configurada
@@ -284,13 +357,15 @@ FullStack-SpaceNode/
 - ✅ React Router instalado y configurado
 - ✅ Dashboard público creado (PublicDashboard.tsx)
 - ✅ Página de login creada (usa @tailwindcss/forms)
-- ✅ Componentes reutilizables: Button, Input
-- ⏳ WebSocket client pendiente
-- ⏳ Cliente API REST pendiente
-- ⏳ Sistema de autenticación JWT pendiente
-- ⏳ Dashboard privado pendiente
-- ⏳ Protección de rutas (PrivateRoute) pendiente
-- ⏳ Gráficas de telemetría pendientes
+- ✅ Componentes reutilizables: Button, Input, Navbar
+- ✅ PrivateRoute para protección de rutas implementado
+- ✅ AuthContext para gestión de autenticación
+- ✅ Dashboards (AdminDashboard, OperatorDashboard)
+- ✅ Estructura de páginas para nodos y configuración
+- ⏳ WebSocket client para tiempo real
+- ⏳ Cliente API REST completo (servicios)
+- ⏳ Gráficas de telemetría (Recharts/ECharts)
+- ⏳ Componentes de formularios y nodos
 
 **Infraestructura:**
 - ✅ Docker Compose configurado
