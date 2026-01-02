@@ -1,0 +1,27 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  
+  // Configuración específica para frontend
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  
+  // Usar tsconfig específico para el editor
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  
+  // Configuración de terminal
+  "terminal.integrated.defaultProfile.linux": "bash",
+  
+  // Excluir node_modules de búsquedas
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.vite": true
+  }
+}

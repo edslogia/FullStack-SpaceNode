@@ -137,13 +137,17 @@ FullStack-SpaceNode/
 │   ├── index.html                    # Punto de entrada HTML
 │   ├── vite.config.ts                # Configuración de Vite
 │   ├── tsconfig.json                 # Config TypeScript base
-│   ├── tsconfig.app.json             # Config TS para app
+│   ├── tsconfig.app.json             # Config TS para build (bundler mode)
+│   ├── tsconfig.vscode.json          # Config TS para VSCode (node resolution)
 │   ├── tsconfig.node.json            # Config TS para Node
 │   ├── tailwind.config.js            # Configuración TailwindCSS
 │   ├── postcss.config.js             # Configuración PostCSS
 │   ├── eslint.config.js              # Configuración ESLint
 │   ├── .gitignore
 │   └── README.md
+│
+├── .vscode/                          # Configuración de VSCode
+│   └── settings.json                 # Settings del workspace
 │
 └── docker-compose.yml                # Servicios:
     ├── timescale (PostgreSQL + TimescaleDB) → Puerto 5432
@@ -165,6 +169,7 @@ FullStack-SpaceNode/
 **Frontend:**
 - ✅ Estructura base React + Vite configurada
 - ✅ TailwindCSS configurado
+- ✅ Configuración dual de TypeScript (bundler + node) para desarrollo
 - ⏳ Componentes de UI pendientes
 - ⏳ WebSocket client pendiente
 - ⏳ Cliente API REST pendiente

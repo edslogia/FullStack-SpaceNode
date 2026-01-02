@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    /* Override para compatibilidad con VSCode */
+    "moduleResolution": "node",
+    
+    /* Deshabilitar validaciones que causan conflicto con bundler */
+    "allowImportingTsExtensions": false,
+    "verbatimModuleSyntax": false
+  }
+}
