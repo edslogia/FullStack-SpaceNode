@@ -17,12 +17,6 @@ interface CreateOperatorForm {
   loading: boolean;
 }
 
-const IconLogout: React.FC<{ className?: string }> = ({ className }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-  </svg>
-);
-
 const IconPlus: React.FC<{ className?: string }> = ({ className }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -139,11 +133,6 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
   if (user?.role !== 'ADMIN') {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -164,13 +153,6 @@ const AdminDashboard: React.FC = () => {
               <h1 className="text-3xl font-bold text-gray-900">Dashboard Admin</h1>
               <p className="text-gray-600 mt-1">Bienvenido, {user?.email}</p>
             </div>
-            <button
-              onClick={handleLogout}
-              className="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
-            >
-              <IconLogout className="w-5 h-5 mr-2" />
-              Salir
-            </button>
           </div>
         </div>
       </div>
