@@ -7,13 +7,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Paleta inspirada en VSCode, predominando negro, gris, verde, morado y azul
-        background: "#1e1e1e",
-        surface: "#252526",
+        // Paleta optimizada: alto contraste, legibilidad WCAG AA, experiencia premium
+        background: "#0a0a0a",
+        surface: "#151515",
+        'surface-hover': "#1f1f1f",
         accent: {
-          green: "#183504ff",
-          purple: "#360933ff",
-          blue: "#012e53ff",
+          green: "#10b981",    // Esmeralda vibrante (éxito, tiempo real)
+          purple: "#8b5cf6",   // Violeta profesional (seguridad, premium)
+          blue: "#3b82f6",     // Azul eléctrico (tecnología, confianza)
+          orange: "#f59e0b",   // Ámbar (alertas, energía)
         },
         gray: {
           100: "#d4d4d4",
@@ -31,7 +33,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'), 
-  ],
+  plugins: [],
 }
