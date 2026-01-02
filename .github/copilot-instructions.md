@@ -10,6 +10,13 @@ Desarrollo en Linux Parrillada OS, usando VSCode. De ser posible, sugiere prueba
 
 Cada vez que se crea un archivo debes actualizar la arquitectura del proyecto en /.guthub/copilot-instructions.md
 
+## Habilidades del desarrollador
+
+###
+
+- Python, JavaScript, C++, HTML, Bootstrap, React, Express, Node.js, WebSockets programación de microcontroladores, MongoDB, SQL (ESP32, ESP 8266)
+- Este proyecto es para aprender: NestJS, TypeScript, MQTT, Prisma, TimescaleDB, Docker, Vite, TailwindCSS 
+
 ## Stack y componentes
 
 ### Backend (NestJS + TypeScript)
@@ -31,13 +38,15 @@ Cada vez que se crea un archivo debes actualizar la arquitectura del proyecto en
 - TimescaleDB - puerto 5432.
 - PGAdmin 4 - puerto 5050.
 - Backend NestJS (API: 3000, WS: 3001).
+- Frontend Vite (puerto 5173).
 
-### Frontend (no implementado, pero estandarizado)
+### Frontend
 - React + TypeScript, Vite, TailwindCSS.
 - WebSocket client para tiempo real.
+- Consumo de API REST.
 - Recharts/ECharts para gráficas.
 - JWT Auth.
-- Pantallas: dashboard, historial, estado, log de fallas, configuración.
+- Pantallas: login, dashboard, historial, estado, log de fallas, configuración.
 
 ### Objetivos técnicos
 - Ingesta estable de telemetría desde ESP32 vía MQTT.
@@ -45,10 +54,11 @@ Cada vez que se crea un archivo debes actualizar la arquitectura del proyecto en
 - Detección de fallas (baja tensión, pérdida de nodo, sobreconsumo).
 - Históricos eficientes con TimescaleDB.
 - Dashboard en tiempo real vía WebSockets.
-- API REST documentada con OpenAPI.
+- API REST para login y gestión.
 - Arquitectura modular y escalable.
 
 ### Estándares del proyecto
+- Diseño responsivo
 - Código en TypeScript estricto.
 - Arquitectura de módulos independientes.
 - DTOs tipados (Zod o class-validator).
