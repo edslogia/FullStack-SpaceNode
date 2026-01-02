@@ -1,3 +1,22 @@
+// Botón reutilizable para mostrar/ocultar contraseña
+interface PasswordToggleButtonProps {
+  onClick: () => void;
+  disabled: boolean;
+  isVisible: boolean;
+  label?: string;
+}
+
+const PasswordToggleButton: React.FC<PasswordToggleButtonProps> = ({ onClick, disabled, isVisible, label }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    disabled={disabled}
+    aria-label={label || (isVisible ? 'Ocultar contraseña' : 'Mostrar contraseña')}
+    className="absolute right-3 top-3 text-gray-500 disabled:text-gray-500 p-0 border-0 bg-transparent cursor-pointer flex items-center justify-center transition-transform duration-150 hover:scale-110"
+  >
+    {isVisible ? <IconEyeOff className="w-5 h-5" /> : <IconEye className="w-5 h-5" />}
+  </button>
+);
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -37,10 +56,33 @@ const IconAlert: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
+const IconEye: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+  </svg>
+);
+
+const IconEyeOff: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    {/* Ojo base (igual que IconEye) */}
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+    {/* Línea diagonal para tachar */}
+    <line x1="4" y1="20" x2="20" y2="4" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
+  </svg>
+);
+
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login, user, changePassword } = useAuth();
   const [step, setStep] = useState<LoginStep>('login');
+  const [showPasswords, setShowPasswords] = useState({
+    login: false,
+    current: false,
+    new: false,
+    confirm: false,
+  });
 
   // Estados
   const [loginForm, setLoginForm] = useState<LoginFormState>({
@@ -156,7 +198,7 @@ const Login: React.FC = () => {
         <div className="bg-gray-900 border border-gray-700 rounded-xl shadow-2xl p-8 space-y-5 sm:p-10 w-full md:w-[450px]">
           {/* Header */}
           <div className="text-center">
-          <p className="mt-2 text-gray-300 text-sm">
+          <p className="text-gray-300 text-lg">
             {step === 'login' ? 'Inicia sesión en tu cuenta' : 'Cambia tu contraseña'}
           </p>
         </div>
@@ -202,14 +244,19 @@ const Login: React.FC = () => {
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPasswords.login ? 'text' : 'password'}
                   autoComplete="current-password"
                   required
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition"
+                  className="w-full pl-10 pr-10 py-2.5 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition"
                   placeholder="••••••••"
                   value={loginForm.password}
                   onChange={handleLoginChange}
                   disabled={loginForm.loading}
+                />
+                <PasswordToggleButton
+                  onClick={() => setShowPasswords({ ...showPasswords, login: !showPasswords.login })}
+                  disabled={loginForm.loading}
+                  isVisible={showPasswords.login}
                 />
               </div>
             </div>
@@ -242,51 +289,75 @@ const Login: React.FC = () => {
               <label htmlFor="currentPassword" className="block text-sm font-semibold text-gray-200 mb-2">
                 Contraseña actual
               </label>
-              <input
-                id="currentPassword"
-                name="currentPassword"
-                type="password"
-                required
-                className="w-full px-4 py-2.5 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition"
-                placeholder="••••••••"
-                value={passwordForm.currentPassword}
-                onChange={handlePasswordChange}
-                disabled={passwordForm.loading}
-              />
+              <div className="relative">
+                <IconLock className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
+                <input
+                  id="currentPassword"
+                  name="currentPassword"
+                  type={showPasswords.current ? 'text' : 'password'}
+                  required
+                  className="w-full pl-10 pr-10 py-2.5 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition"
+                  placeholder="••••••••"
+                  value={passwordForm.currentPassword}
+                  onChange={handlePasswordChange}
+                  disabled={passwordForm.loading}
+                />
+                <PasswordToggleButton
+                  onClick={() => setShowPasswords({ ...showPasswords, current: !showPasswords.current })}
+                  disabled={passwordForm.loading}
+                  isVisible={showPasswords.current}
+                />
+              </div>
             </div>
 
             <div>
               <label htmlFor="newPassword" className="block text-sm font-semibold text-gray-200 mb-2">
                 Nueva contraseña
               </label>
-              <input
-                id="newPassword"
-                name="newPassword"
-                type="password"
-                required
-                className="w-full px-4 py-2.5 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition"
-                placeholder="••••••••"
-                value={passwordForm.newPassword}
-                onChange={handlePasswordChange}
-                disabled={passwordForm.loading}
-              />
+              <div className="relative">
+                <IconLock className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
+                <input
+                  id="newPassword"
+                  name="newPassword"
+                  type={showPasswords.new ? 'text' : 'password'}
+                  required
+                  className="w-full pl-10 pr-10 py-2.5 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition"
+                  placeholder="••••••••"
+                  value={passwordForm.newPassword}
+                  onChange={handlePasswordChange}
+                  disabled={passwordForm.loading}
+                />
+                <PasswordToggleButton
+                  onClick={() => setShowPasswords({ ...showPasswords, new: !showPasswords.new })}
+                  disabled={passwordForm.loading}
+                  isVisible={showPasswords.new}
+                />
+              </div>
             </div>
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-200 mb-2">
                 Confirmar contraseña
               </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                required
-                className="w-full px-4 py-2.5 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition"
-                placeholder="••••••••"
-                value={passwordForm.confirmPassword}
-                onChange={handlePasswordChange}
-                disabled={passwordForm.loading}
-              />
+              <div className="relative">
+                <IconLock className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showPasswords.confirm ? 'text' : 'password'}
+                  required
+                  className="w-full pl-10 pr-10 py-2.5 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition"
+                  placeholder="••••••••"
+                  value={passwordForm.confirmPassword}
+                  onChange={handlePasswordChange}
+                  disabled={passwordForm.loading}
+                />
+                <PasswordToggleButton
+                  onClick={() => setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })}
+                  disabled={passwordForm.loading}
+                  isVisible={showPasswords.confirm}
+                />
+              </div>
             </div>
 
               <button
