@@ -151,15 +151,12 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-lg shadow-lg mb-4">
-            <IconLock className="w-8 h-8 text-white" />
-          </div>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">SpaceNode</h2>
-          <p className="mt-2 text-gray-600">
+      <div className="w-full max-w-2xl sm:px-4">
+        {/* Contenedor Principal */}
+        <div className="bg-gray-900 border border-gray-700 rounded-xl shadow-2xl p-8 space-y-5 sm:p-10 w-full md:w-[450px]">
+          {/* Header */}
+          <div className="text-center">
+          <p className="mt-2 text-gray-300 text-sm">
             {step === 'login' ? 'Inicia sesión en tu cuenta' : 'Cambia tu contraseña'}
           </p>
         </div>
@@ -167,27 +164,27 @@ const Login: React.FC = () => {
         {/* Formulario */}
         {step === 'login' ? (
           // Login Form
-          <form className="space-y-6" onSubmit={handleLoginSubmit}>
+          <form className="space-y-5" onSubmit={handleLoginSubmit}>
             {loginForm.error && (
-              <div className="rounded-md bg-red-50 border border-red-200 p-4 flex gap-3">
-                <IconAlert className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-red-700">{loginForm.error}</p>
+              <div className="rounded-md bg-red-900 bg-opacity-20 border border-red-600 p-4 flex gap-3">
+                <IconAlert className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-400">{loginForm.error}</p>
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-200 mb-2">
                 Email
               </label>
               <div className="relative">
-                <IconMail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <IconMail className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
                 <input
                   id="email"
                   name="email"
                   type="email"
                   autoComplete="email"
                   required
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2.5 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition"
                   placeholder="tu-correo@email.com"
                   value={loginForm.email}
                   onChange={handleLoginChange}
@@ -197,18 +194,18 @@ const Login: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-semibold text-gray-200 mb-2">
                 Contraseña
               </label>
               <div className="relative">
-                <IconLock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <IconLock className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
                 <input
                   id="password"
                   name="password"
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2.5 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition"
                   placeholder="••••••••"
                   value={loginForm.password}
                   onChange={handleLoginChange}
@@ -220,29 +217,29 @@ const Login: React.FC = () => {
             <button
               type="submit"
               disabled={loginForm.loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200"
             >
               {loginForm.loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
             </button>
           </form>
         ) : (
           // Change Password Form
-          <form className="space-y-6" onSubmit={handlePasswordSubmit}>
+          <form className="space-y-5" onSubmit={handlePasswordSubmit}>
             {passwordForm.error && (
-              <div className="rounded-md bg-red-50 border border-red-200 p-4 flex gap-3">
-                <IconAlert className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-red-700">{passwordForm.error}</p>
+              <div className="rounded-md bg-red-900 bg-opacity-20 border border-red-600 p-4 flex gap-3">
+                <IconAlert className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-400">{passwordForm.error}</p>
               </div>
             )}
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-800">
+            <div className="bg-blue-900 bg-opacity-20 border border-blue-600 rounded-lg p-4">
+              <p className="text-sm text-blue-300">
                 <strong>Nota:</strong> Debes cambiar tu contraseña temporal antes de continuar.
               </p>
             </div>
 
             <div>
-              <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="currentPassword" className="block text-sm font-semibold text-gray-200 mb-2">
                 Contraseña actual
               </label>
               <input
@@ -250,7 +247,7 @@ const Login: React.FC = () => {
                 name="currentPassword"
                 type="password"
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2.5 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition"
                 placeholder="••••••••"
                 value={passwordForm.currentPassword}
                 onChange={handlePasswordChange}
@@ -259,7 +256,7 @@ const Login: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="newPassword" className="block text-sm font-semibold text-gray-200 mb-2">
                 Nueva contraseña
               </label>
               <input
@@ -267,7 +264,7 @@ const Login: React.FC = () => {
                 name="newPassword"
                 type="password"
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2.5 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition"
                 placeholder="••••••••"
                 value={passwordForm.newPassword}
                 onChange={handlePasswordChange}
@@ -276,7 +273,7 @@ const Login: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-200 mb-2">
                 Confirmar contraseña
               </label>
               <input
@@ -284,7 +281,7 @@ const Login: React.FC = () => {
                 name="confirmPassword"
                 type="password"
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2.5 border border-gray-600 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition"
                 placeholder="••••••••"
                 value={passwordForm.confirmPassword}
                 onChange={handlePasswordChange}
@@ -292,17 +289,17 @@ const Login: React.FC = () => {
               />
             </div>
 
-            <button
+              <button
               type="submit"
               disabled={passwordForm.loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200"
             >
               {passwordForm.loading ? 'Cambiando contraseña...' : 'Cambiar contraseña'}
             </button>
           </form>
         )}
+        </div>
       </div>
-    </div>
   );
 };
 
