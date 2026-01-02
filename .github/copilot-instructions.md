@@ -67,6 +67,103 @@ Cada vez que se crea un archivo debes actualizar la arquitectura del proyecto en
 - Uso de commit semántico.
 - Dockerización completa.
 
+## Arquitectura actual del proyecto
+
+```
+FullStack-SpaceNode/
+├── .github/
+│   └── copilot-instructions.md      # Instrucciones para el agente AI
+├── .env                              # Variables de entorno (gitignored)
+├── .env.copy                         # Plantilla de variables de entorno
+├── .gitignore                        # Archivos ignorados por git
+├── docker-compose.yml                # Orquestación de contenedores
+│
+├── backend/                          # API NestJS + MQTT + WebSocket
+│   ├── src/
+│   │   ├── main.ts                   # Punto de entrada de la aplicación
+│   │   ├── app.module.ts             # Módulo raíz
+│   │   ├── app.controller.ts         # Controlador raíz
+│   │   ├── app.service.ts            # Servicio raíz
+│   │   ├── app.controller.spec.ts    # Tests del controlador
+│   │   ├── mqtt/                     # Módulo MQTT
+│   │   │   ├── mqtt.module.ts        # Configuración del módulo MQTT
+│   │   │   └── mqtt.service.ts       # Servicio de suscripción MQTT
+│   │   └── prisma/                   # Módulo Prisma (vacío por ahora)
+│   ├── prisma/                       # Configuración de Prisma (vacío)
+│   ├── test/                         # Tests E2E
+│   │   ├── app.e2e-spec.ts
+│   │   └── jest-e2e.json
+│   ├── dist/                         # Build compilado
+│   ├── node_modules/                 # Dependencias npm
+│   ├── package.json                  # Dependencias y scripts
+│   ├── package-lock.json
+│   ├── tsconfig.json                 # Configuración TypeScript
+│   ├── tsconfig.build.json           # Config de build
+│   ├── nest-cli.json                 # Config de NestJS CLI
+│   ├── eslint.config.mjs             # Config de ESLint
+│   ├── .prettierrc                   # Config de Prettier
+│   ├── .gitignore
+│   └── README.md
+│
+├── frontend/                         # App React + Vite + TailwindCSS
+│   ├── src/
+│   │   ├── main.tsx                  # Punto de entrada React
+│   │   ├── App.tsx                   # Componente raíz
+│   │   ├── App.css                   # Estilos del componente App
+│   │   ├── index.css                 # Estilos globales + Tailwind
+│   │   └── assets/                   # Recursos estáticos
+│   │       └── react.svg
+│   ├── public/                       # Assets públicos
+│   │   └── vite.svg
+│   ├── .vite/                        # Cache de Vite
+│   ├── node_modules/                 # Dependencias npm
+│   ├── package.json                  # Dependencias y scripts
+│   ├── package-lock.json
+│   ├── index.html                    # Punto de entrada HTML
+│   ├── vite.config.ts                # Configuración de Vite
+│   ├── tsconfig.json                 # Config TypeScript base
+│   ├── tsconfig.app.json             # Config TS para app
+│   ├── tsconfig.node.json            # Config TS para Node
+│   ├── tailwind.config.js            # Configuración TailwindCSS
+│   ├── postcss.config.js             # Configuración PostCSS
+│   ├── eslint.config.js              # Configuración ESLint
+│   ├── .gitignore
+│   └── README.md
+│
+└── docker-compose.yml                # Servicios:
+    ├── timescale (PostgreSQL + TimescaleDB) → Puerto 5432
+    ├── pgadmin (Administrador de BD) → Puerto 5050
+    └── emqx (Broker MQTT) → Puertos 1883, 18083
+```
+
+### Estado actual de desarrollo
+
+**Backend:**
+- ✅ Estructura base NestJS configurada
+- ✅ Módulo MQTT inicializado
+- ✅ Dependencias instaladas: Prisma, MQTT, Pino Logger, class-validator
+- ⏳ Prisma schema pendiente de creación
+- ⏳ WebSocket Gateway pendiente
+- ⏳ API REST pendiente
+- ⏳ Autenticación JWT pendiente
+
+**Frontend:**
+- ✅ Estructura base React + Vite configurada
+- ✅ TailwindCSS configurado
+- ⏳ Componentes de UI pendientes
+- ⏳ WebSocket client pendiente
+- ⏳ Cliente API REST pendiente
+- ⏳ Sistema de autenticación pendiente
+- ⏳ Dashboard y gráficas pendientes
+
+**Infraestructura:**
+- ✅ Docker Compose configurado
+- ✅ TimescaleDB configurado
+- ✅ PGAdmin configurado
+- ✅ EMQX configurado
+- ⏳ Backend en Docker pendiente
+- ⏳ Frontend en Docker pendiente
+
 ## Capacidades del asistente IA
 
 El asistente debe poder:
