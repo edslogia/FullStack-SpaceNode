@@ -111,9 +111,10 @@ export class AuthService {
   /**
    * Crea un nuevo usuario operador (solo admin puede crear).
    * El admin debe estar verificado por un Guard en el controlador.
+   * Si se proporciona clientId, el operador se asigna a ese cliente.
    */
   async createOperator(createOperatorDto: CreateOperatorDto) {
-    const { email, password } = createOperatorDto;
+    const { email, password, clientId } = createOperatorDto;
 
     // Validar email único
     const existingUser = await this.prisma.user.findUnique({
@@ -128,6 +129,17 @@ export class AuthService {
       throw new BadRequestException('La contraseña debe tener al menos 8 caracteres');
     }
 
+    // Si se proporciona clientId, validar que el cliente existe
+    if (clientId) {
+      const clientExists = await this.prisma.client.findUnique({
+        where: { id: clientId },
+      });
+
+      if (!clientExists) {
+        throw new BadRequestException('El cliente especificado no existe');
+      }
+    }
+
     // Hash de contraseña
     const hashedPassword = await argon2.hash(password);
 
@@ -137,7 +149,16 @@ export class AuthService {
         email: email.toLowerCase(),
         password: hashedPassword,
         role: 'OPERATOR',
+        clientId: clientId || null, // Asignar cliente si se proporciona
         firstLoginPasswordChange: true, // El operador debe cambiar contraseña en primer login
+      },
+      include: {
+        client: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
 
@@ -145,6 +166,8 @@ export class AuthService {
       id: newUser.id,
       email: newUser.email,
       role: newUser.role,
+      clientId: newUser.clientId,
+      client: newUser.client,
       message: 'Operador creado correctamente. Debe cambiar la contraseña en el primer login.',
     };
   }
