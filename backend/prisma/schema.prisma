@@ -16,18 +16,40 @@ enum UserRole {
   OPERATOR
 }
 
+// Modelo Client para ubicaciones físicas (clientes/propiedades)
+model Client {
+  id          String   @id @default(cuid())
+  name        String   // Nombre del cliente: "Parcelación La Albania", "Edificio Open 54"
+  address     String   // Dirección física
+  contact     String?  // Contacto: nombre o teléfono del administrador
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relación con operadores asignados a este cliente
+  users       User[]
+
+  @@index([name])
+  @@map("clients")
+}
+
 // Modelo User para autenticación y autorización
 model User {
   id                          String   @id @default(cuid())
   email                       String   @unique
   password                    String   // Hash con Argon2
   role                        UserRole @default(OPERATOR)
+  clientId                    String?  // FK a Client (null si es ADMIN global, requerido si es OPERATOR)
   firstLoginPasswordChange    Boolean  @default(true) // Flag para forzar cambio de contraseña
   isActive                    Boolean  @default(true)
   createdAt                   DateTime @default(now())
   updatedAt                   DateTime @updatedAt
 
+  // Relación con Client
+  client                      Client?  @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
   @@index([email])
+  @@index([clientId])
   @@map("users")
 }
 
