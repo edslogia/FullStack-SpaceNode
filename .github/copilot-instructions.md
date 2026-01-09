@@ -139,6 +139,7 @@ Logia Watcher:
 
 ## Stack y componentes
 
+
 ### Arquitectura de carpetas actual (enero 2026)
 
 ```
@@ -151,6 +152,17 @@ FullStack-SpaceNode/
 │   ├── README.md
 │   ├── tsconfig.build.json
 │   ├── tsconfig.json
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   ├── seed.ts
+│   │   └── migrations/
+│   │       ├── migration_lock.toml
+│   │       ├── 20260109173650_init_admin_system/
+│   │       │   └── migration.sql
+│   │       ├── 20260109174527_add_password_change_flag/
+│   │       │   └── migration.sql
+│   │       └── 20260109215009_add_nodo_and_relations/
+│   │           └── migration.sql
 │   ├── src/
 │   │   ├── main.ts
 │   │   ├── app.module.ts
@@ -171,6 +183,17 @@ FullStack-SpaceNode/
 │   │   │   │   └── update-customer.dto.ts
 │   │   │   └── entities/
 │   │   │       └── customer.entity.ts
+│   │   ├── nodo/
+│   │   │   ├── nodo.controller.spec.ts
+│   │   │   ├── nodo.controller.ts
+│   │   │   ├── nodo.module.ts
+│   │   │   ├── nodo.service.spec.ts
+│   │   │   ├── nodo.service.ts
+│   │   │   ├── dto/
+│   │   │   │   ├── create-nodo.dto.ts
+│   │   │   │   └── update-nodo.dto.ts
+│   │   │   └── entities/
+│   │   │       └── nodo.entity.ts
 │   │   ├── operator/
 │   │   │   ├── operator.controller.spec.ts
 │   │   │   ├── operator.controller.ts
@@ -182,8 +205,7 @@ FullStack-SpaceNode/
 │   │   │   │   └── update-operator.dto.ts
 │   │   │   └── entities/
 │   │   │       └── operator.entity.ts
-│   │   └── prisma/
-│   ├── prisma/
+│   │   └── /
 │   ├── test/
 │   │   ├── app.e2e-spec.ts
 │   │   └── jest-e2e.json
