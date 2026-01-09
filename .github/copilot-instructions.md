@@ -139,91 +139,129 @@ Logia Watcher:
 
 ## Stack y componentes
 
-### Backend (NestJS + TypeScript)
-- Generar código orientado a módulos NestJS.
-- Crear microservicios MQTT listos para EMQX.
-- Suscripción y validación de telemetría.
-- Transformación a DTOs (usando Zod o class-validator).
-- Guardado en BD con Prisma (TimescaleDB sobre PostgreSQL).
-- Reenvío de datos a WebSocket Gateway (evento estándar: node_update).
-- API REST versionada (/api/v1) para gestión de nodos, historial, configuración y autenticación JWT.
-- Documentación OpenAPI.
-- Servicio de métricas: cálculo de estado, detección de fallas, heartbeat.
-- Autenticación JWT + Argon2.
-- Logging con Pino Logger.
-- Health checks para servicios.
-
-### Infraestructura (Docker Compose)
-- EMQX (broker MQTT) - puertos 1883/18083.
-- TimescaleDB - puerto 5432.
-- PGAdmin 4 - puerto 5050.
-- Backend NestJS (API: 3000, WS: 3001).
-- Frontend Vite (puerto 5173).
-
-### Frontend (React + FSD Architecture)
-- React + TypeScript, Vite, TailwindCSS.
-- **Arquitectura Feature-Sliced Design (FSD)**.
-- WebSocket client para tiempo real.
-- Consumo de API REST.
-- Recharts/ECharts para gráficas.
-- JWT Auth.
-- Pantallas: login, dashboard, historial, estado, log de fallas, configuración.
-
-#### Feature-Sliced Design (FSD) - Estructura Obligatoria
+### Arquitectura de carpetas actual (enero 2026)
 
 ```
-frontend/src/
-├── app/                    # Capa de aplicación (configuración global)
-│   ├── providers/          # Context providers (Auth, Theme, WebSocket)
-│   ├── router/             # Configuración de rutas
-│   ├── styles/             # Estilos globales
-│   └── index.tsx           # Punto de entrada con providers
+FullStack-SpaceNode/
+├── docker-compose.yml
+├── backend/
+│   ├── eslint.config.mjs
+│   ├── nest-cli.json
+│   ├── package.json
+│   ├── README.md
+│   ├── tsconfig.build.json
+│   ├── tsconfig.json
+│   ├── src/
+│   │   ├── main.ts
+│   │   ├── app.module.ts
+│   │   ├── app.controller.ts
+│   │   ├── app.service.ts
+│   │   ├── app.controller.spec.ts
+│   │   ├── mqtt/
+│   │   │   ├── mqtt.module.ts
+│   │   │   └── mqtt.service.ts
+│   │   ├── customer/
+│   │   │   ├── customer.controller.spec.ts
+│   │   │   ├── customer.controller.ts
+│   │   │   ├── customer.module.ts
+│   │   │   ├── customer.service.spec.ts
+│   │   │   ├── customer.service.ts
+│   │   │   ├── dto/
+│   │   │   │   ├── create-customer.dto.ts
+│   │   │   │   └── update-customer.dto.ts
+│   │   │   └── entities/
+│   │   │       └── customer.entity.ts
+│   │   ├── operator/
+│   │   │   ├── operator.controller.spec.ts
+│   │   │   ├── operator.controller.ts
+│   │   │   ├── operator.module.ts
+│   │   │   ├── operator.service.spec.ts
+│   │   │   ├── operator.service.ts
+│   │   │   ├── dto/
+│   │   │   │   ├── create-operator.dto.ts
+│   │   │   │   └── update-operator.dto.ts
+│   │   │   └── entities/
+│   │   │       └── operator.entity.ts
+│   │   └── prisma/
+│   ├── prisma/
+│   ├── test/
+│   │   ├── app.e2e-spec.ts
+│   │   └── jest-e2e.json
+│   ├── dist/
+│   ├── node_modules/
+│   ├── package-lock.json
+│   ├── .prettierrc
+│   ├── .gitignore
+│   └── README.md
 │
-├── pages/                  # Capa de páginas (composición de widgets)
-│   ├── login/
-│   │   ├── ui/
-│   │   └── index.ts
-│   ├── dashboard/
-│   │   ├── ui/
-│   │   └── index.ts
-│   ├── history/
-│   ├── node-status/
-│   ├── fault-log/
-│   └── settings/
+├── frontend/
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── README.md
+│   ├── tailwind.config.js
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   ├── tsconfig.vscode.json
+│   ├── vite.config.ts
+│   ├── public/
+│   ├── src/
+│   │   ├── App.css
+│   │   ├── App.tsx
+│   │   ├── index.css
+│   │   ├── main.tsx
+│   │   ├── app/
+│   │   │   ├── providers/
+│   │   │   ├── router/
+│   │   │   ├── styles/
+│   │   ├── assets/
+│   │   ├── constants/
+│   │   ├── entities/
+│   │   │   ├── fault/
+│   │   │   ├── node/
+│   │   │   │   ├── api/
+│   │   │   │   ├── model/
+│   │   │   │   ├── ui/
+│   │   │   ├── telemetry/
+│   │   │   ├── user/
+│   │   ├── features/
+│   │   │   ├── alert-management/
+│   │   │   ├── auth/
+│   │   │   │   ├── api/
+│   │   │   │   ├── model/
+│   │   │   │   ├── ui/
+│   │   │   ├── data-export/
+│   │   │   ├── node-control/
+│   │   ├── pages/
+│   │   │   ├── dashboard/
+│   │   │   │   ├── ui/
+│   │   │   ├── fault-log/
+│   │   │   ├── history/
+│   │   │   ├── login/
+│   │   │   │   ├── ui/
+│   │   │   ├── node-status/
+│   │   │   ├── settings/
+│   │   ├── services/
+│   │   ├── shared/
+│   │   │   ├── api/
+│   │   │   ├── config/
+│   │   │   ├── lib/
+│   │   │   ├── types/
+│   │   │   ├── ui/
+│   │   ├── types/
+│   │   ├── widgets/
+│   │   │   ├── fault-alert-panel/
+│   │   │   ├── header/
+│   │   │   ├── node-card/
+│   │   │   ├── sidebar/
+│   │   │   ├── telemetry-chart/
 │
-├── widgets/                # Capa de widgets (bloques de UI compuestos)
-│   ├── header/
-│   ├── sidebar/
-│   ├── node-card/
-│   ├── telemetry-chart/
-│   └── fault-alert-panel/
-│
-├── features/               # Capa de features (acciones del usuario)
-│   ├── auth/               # Login, logout, refresh token
-│   │   ├── api/
-│   │   ├── model/
-│   │   ├── ui/
-│   │   └── index.ts
-│   ├── node-control/       # Control de nodos (on/off, config)
-│   ├── data-export/        # Exportar datos históricos
-│   └── alert-management/   # Gestión de alertas
-│
-├── entities/               # Capa de entidades (objetos de negocio)
-│   ├── node/               # Entidad Nodo
-│   │   ├── api/
-│   │   ├── model/
-│   │   ├── ui/
-│   │   └── index.ts
-│   ├── telemetry/          # Entidad Telemetría
-│   ├── user/               # Entidad Usuario
-│   └── fault/              # Entidad Falla
-│
-└── shared/                 # Capa compartida (código reutilizable)
-    ├── api/                # Cliente HTTP, WebSocket client
-    ├── config/             # Constantes, env variables
-    ├── lib/                # Utilidades (formatters, validators)
-    ├── ui/                 # Componentes UI primitivos (Button, Input, Card)
-    └── types/              # Tipos globales TypeScript
+├── .vscode/
+│   └── settings.json
+└── .github/
+   └── copilot-instructions.md
 ```
 
 #### Reglas FSD (NO NEGOCIABLES)
