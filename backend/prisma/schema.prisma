@@ -18,22 +18,23 @@ model Administrator {
   email              String   @unique
   fullName           String
   isActive           Boolean  @default(true)
-  hasChangedPassword Boolean  @default(false) // Indica si cambió la contraseña de fábrica
+  hasChangedPassword Boolean  @default(false)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
   @@map("administrators")
 }
 
-// Modelo de Cliente - Usuarios finales del sistema
+// Modelo de Cliente - Sitio físico al cual se le asignan nodos
 model Customer {
   id        String   @id @default(uuid())
   username  String   @unique
-  email     String   @unique
   fullName  String
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  nodos     Nodo[]
+  operators OperatorCustomer[]
 
   @@map("customers")
 }
@@ -47,6 +48,43 @@ model Operator {
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  hasChangedPassword Boolean @default(false)
+  customers OperatorCustomer[]
 
   @@map("operators")
+
+}
+
+// Tabla intermedia para relación muchos-a-muchos Operator-Customer
+model OperatorCustomer {
+  id         String    @id @default(uuid())
+  operator   Operator  @relation(fields: [operatorId], references: [id])
+  operatorId String
+  customer   Customer  @relation(fields: [customerId], references: [id])
+  customerId String
+
+  @@map("operator_customers")
+}
+
+// Modelo Nodo: información básica y relación a Customer
+model Nodo {
+  id             String   @id @default(uuid())
+  name           String
+  topicMqtt      String
+  topicMqtt2     String
+  topicMqtt3     String
+  macAddress     String   @unique
+  hostnameOta    String
+  mqttId         String
+  ipAddress      String
+  hardwareVersion String
+  softwareVersion String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relación: Nodo asignado a un Customer
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String
+
+  @@map("nodos")
 }
