@@ -9,9 +9,10 @@ export class AppController {
     private readonly mqttService: MqttService,
   ) {}
 
+
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getStatus(): string  {
+    return this.appService.getStatus();;
   }
 
   /**
