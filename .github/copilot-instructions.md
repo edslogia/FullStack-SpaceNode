@@ -306,6 +306,7 @@ FullStack-SpaceNode/
 - Publicación de eventos WebSocket en formato JSON.
 - Uso de commit semántico.
 - Dockerización completa.
+- Se deben implmentar archivos css fuera de los componentes. No debe usarse estilos inline.
 
 ```
 FullStack-SpaceNode/
