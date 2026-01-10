@@ -139,7 +139,6 @@ Logia Watcher:
 
 ## Stack y componentes
 
-
 ### Arquitectura de carpetas actual (enero 2026)
 
 ```
@@ -164,14 +163,13 @@ FullStack-SpaceNode/
 │   │       └── 20260109215009_add_nodo_and_relations/
 │   │           └── migration.sql
 │   ├── src/
-│   │   ├── main.ts
-│   │   ├── app.module.ts
-│   │   ├── app.controller.ts
-│   │   ├── app.service.ts
 │   │   ├── app.controller.spec.ts
-│   │   ├── mqtt/
-│   │   │   ├── mqtt.module.ts
-│   │   │   └── mqtt.service.ts
+│   │   ├── app.controller.ts
+│   │   ├── app.module.ts
+│   │   ├── app.service.ts
+│   │   ├── main.ts
+│   │   ├── prisma.module.ts
+│   │   ├── prisma.service.ts
 │   │   ├── customer/
 │   │   │   ├── customer.controller.spec.ts
 │   │   │   ├── customer.controller.ts
@@ -183,6 +181,9 @@ FullStack-SpaceNode/
 │   │   │   │   └── update-customer.dto.ts
 │   │   │   └── entities/
 │   │   │       └── customer.entity.ts
+│   │   ├── mqtt/
+│   │   │   ├── mqtt.module.ts
+│   │   │   └── mqtt.service.ts
 │   │   ├── nodo/
 │   │   │   ├── nodo.controller.spec.ts
 │   │   │   ├── nodo.controller.ts
@@ -205,17 +206,15 @@ FullStack-SpaceNode/
 │   │   │   │   └── update-operator.dto.ts
 │   │   │   └── entities/
 │   │   │       └── operator.entity.ts
-│   │   └── /
-│   ├── test/
-│   │   ├── app.e2e-spec.ts
-│   │   └── jest-e2e.json
+│   │   └── test/
+│   │       ├── app.e2e-spec.ts
+│   │       └── jest-e2e.json
 │   ├── dist/
 │   ├── node_modules/
 │   ├── package-lock.json
 │   ├── .prettierrc
 │   ├── .gitignore
 │   └── README.md
-│
 ├── frontend/
 │   ├── eslint.config.js
 │   ├── index.html
@@ -235,51 +234,23 @@ FullStack-SpaceNode/
 │   │   ├── index.css
 │   │   ├── main.tsx
 │   │   ├── app/
-│   │   │   ├── providers/
-│   │   │   ├── router/
-│   │   │   ├── styles/
+│   │   │   ├── layouts/
+│   │   │   │   ├── index.ts
+│   │   │   │   └── MainLayout.tsx
 │   │   ├── assets/
-│   │   ├── constants/
-│   │   ├── entities/
-│   │   │   ├── fault/
-│   │   │   ├── node/
-│   │   │   │   ├── api/
-│   │   │   │   ├── model/
-│   │   │   │   ├── ui/
-│   │   │   ├── telemetry/
-│   │   │   ├── user/
-│   │   ├── features/
-│   │   │   ├── alert-management/
-│   │   │   ├── auth/
-│   │   │   │   ├── api/
-│   │   │   │   ├── model/
-│   │   │   │   ├── ui/
-│   │   │   ├── data-export/
-│   │   │   ├── node-control/
-│   │   ├── pages/
-│   │   │   ├── dashboard/
-│   │   │   │   ├── ui/
-│   │   │   ├── fault-log/
-│   │   │   ├── history/
-│   │   │   ├── login/
-│   │   │   │   ├── ui/
-│   │   │   ├── node-status/
-│   │   │   ├── settings/
-│   │   ├── services/
 │   │   ├── shared/
-│   │   │   ├── api/
 │   │   │   ├── config/
-│   │   │   ├── lib/
-│   │   │   ├── types/
-│   │   │   ├── ui/
-│   │   ├── types/
+│   │   │   │   ├── index.ts
+│   │   │   │   └── layout.ts
 │   │   ├── widgets/
-│   │   │   ├── fault-alert-panel/
-│   │   │   ├── header/
-│   │   │   ├── node-card/
-│   │   │   ├── sidebar/
-│   │   │   ├── telemetry-chart/
-│
+│   │   │   ├── footer/
+│   │   │   │   ├── index.ts
+│   │   │   │   └── ui/
+│   │   │   │       └── Footer.tsx
+│   │   │   ├── landing-navbar/
+│   │   │   │   ├── index.ts
+│   │   │   │   └── ui/
+│   │   │   │       └── LandingNavbar.tsx
 ├── .vscode/
 │   └── settings.json
 └── .github/
@@ -408,23 +379,6 @@ FullStack-SpaceNode/
     ├── pgadmin (Administrador de BD) → Puerto 5050
     └── emqx (Broker MQTT) → Puertos 1883, 18083
 ```
-
-### Estado actual de desarrollo
-
-**Backend:**
-- Estructura base NestJS configurada
-- Módulo MQTT inicializado
-- Dependencias instaladas: Prisma, MQTT, Pino Logger, class-validator
-
-**Frontend:**
-- Estructura base React + Vite configurada
-- TailwindCSS configurado
-- Configuración dual de TypeScript (bundler + node) para desarrollo
-**Infraestructura:**
-- Docker Compose configurado
-- TimescaleDB configurado
-- PGAdmin configurado
-- EMQX configurado
 
 ## Capacidades del asistente IA
 
