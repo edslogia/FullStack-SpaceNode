@@ -2,16 +2,42 @@
 :root {
   /* Colores principales */
   --space-deep: #0A0E27;
+  --space-deep-alt: #10142a;
   --space-nebula: #141B3D;
-  --space-cosmos: #050816;
+  --space-nebula-alt: #232a4d;
+  --space-cosmos: #1c273b;
+  --space-cosmos-light: #2a3550;
+  --space-cosmos-dark: #131a2a;
   --cyan-core: #00D9FF;
+  --cyan-core-light: #5eeeff;
+  --cyan-core-dark: #009bb3;
   --electric-blue: #3B82F6;
+  --electric-blue-light: #60a5fa;
+  --electric-blue-dark: #1e40af;
   --aurora-mint: #7DD3C0;
+  --aurora-mint-light: #b9f5e5;
+  --aurora-mint-dark: #319c8a;
+  --galaxy-purple: #6d28d9;
+  --galaxy-purple-light: #a78bfa;
+  --galaxy-purple-dark: #4c1d95;
+  --star-gold: #fbbf24;
+  --star-gold-light: #fde68a;
+  --star-gold-dark: #b45309;
+  --comet-pink: #ec4899;
+  --comet-pink-light: #f9a8d4;
+  --comet-pink-dark: #be185d;
   
   /* Colores de texto */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
   --slate-200: #E2E8F0;
+  --slate-300: #cbd5e1;
   --slate-400: #94A3B8;
+  --slate-500: #64748b;
   --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
   
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

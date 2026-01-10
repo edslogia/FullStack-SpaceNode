@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import "./LandingNavbar.css";
@@ -26,7 +25,7 @@ export const LandingNavbar = () => {
           className="d-flex align-items-center gap-2"
         >
           <div
-            className="gradient-cta rounded"
+            className="rounded"
             style={{ width: "32px", height: "32px" }}
           />
           <span className="fs-5 fw-bold text-slate-200">SpaceNode</span>
@@ -51,7 +50,7 @@ export const LandingNavbar = () => {
           {/* CTA Login */}
           <Link
             to="/login"
-            className="btn fw-semibold gradient-cta text-white px-4 py-2"
+            className="btn fw-semibold text-white px-4 py-2"
           >
             Login
           </Link>

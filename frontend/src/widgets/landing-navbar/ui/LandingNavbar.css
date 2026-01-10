@@ -1,11 +1,7 @@
 
 /* Fondo igual al footer */
 .bg-space-cosmos {
-  background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
-}
-
-.gradient-cta {
-  background: linear-gradient(135deg, #6366f1 0%, #0ea5e9 100%);
+  background: #d5d6d8;
 }
 
 .text-slate-200 {
