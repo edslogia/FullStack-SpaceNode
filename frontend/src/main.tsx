@@ -4,6 +4,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 import { MainLayout } from './app/layouts'
+import { LoginPage } from './pages/login';
 
 // Configuración temporal del router
 const router = createBrowserRouter([
@@ -27,18 +28,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/login',
-        element: (
-          <div className="min-vh-100 d-flex align-items-center justify-content-center">
-            <div className="text-center">
-              <h1 className="display-5 fw-bold text-slate-200 mb-4">
-                Login
-              </h1>
-              <p className="text-slate-400">
-                Página de login - Pendiente
-              </p>
-            </div>
-          </div>
-        ),
+        element: <LoginPage />,
       },
     ],
   },
