@@ -129,12 +129,12 @@ Logia Watcher:
 - Variables: inglés
 - Actualización de arquitectura obligatoria
 - No escribas código en el chat a menos que se te solicite.
-- Usa los themes y plugins que estan en tailwind.config.js para los componentes frontend.
+- Usa Boostrap
 
 ## Habilidades del desarrollador
 
 - Python, JavaScript, C++, HTML, Bootstrap, React, Express, Node.js, WebSockets programación de microcontroladores, MongoDB, SQL (ESP32, ESP 8266)
-- Este proyecto es para aprender: NestJS, TypeScript, MQTT, Prisma, TimescaleDB, Docker, Vite, TailwindCSS 
+- Este proyecto es para aprender: NestJS, TypeScript, MQTT, Prisma, TimescaleDB, Docker, Vite, Bootstrap
 
 
 ## Stack y componentes
@@ -219,9 +219,7 @@ FullStack-SpaceNode/
 │   ├── eslint.config.js
 │   ├── index.html
 │   ├── package.json
-│   ├── postcss.config.js
 │   ├── README.md
-│   ├── tailwind.config.js
 │   ├── tsconfig.app.json
 │   ├── tsconfig.json
 │   ├── tsconfig.node.json
@@ -345,12 +343,12 @@ FullStack-SpaceNode/
 │   ├── .gitignore
 │   └── README.md
 │
-├── frontend/                         # App React + Vite + TailwindCSS
+├── frontend/                         # App React + Vite + Bootstrap
 │   ├── src/
 │   │   ├── main.tsx                  # Punto de entrada React
 │   │   ├── App.tsx                   # Componente raíz
 │   │   ├── App.css                   # Estilos del componente App
-│   │   ├── index.css                 # Estilos globales + Tailwind
+│   │   ├── index.css                 # Estilos globales + Bootstrap
 │   │   └── assets/                   # Recursos estáticos
 │   │       └── react.svg
 │   ├── public/                       # Assets públicos
@@ -365,8 +363,6 @@ FullStack-SpaceNode/
 │   ├── tsconfig.app.json             # Config TS para build (bundler mode)
 │   ├── tsconfig.vscode.json          # Config TS para VSCode (node resolution)
 │   ├── tsconfig.node.json            # Config TS para Node
-│   ├── tailwind.config.js            # Configuración TailwindCSS
-│   ├── postcss.config.js             # Configuración PostCSS
 │   ├── eslint.config.js              # Configuración ESLint
 │   ├── .gitignore
 │   └── README.md

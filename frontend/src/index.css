@@ -1,38 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Optimización de backdrop-filter para navegadores */
-@supports (backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px)) {
-  .backdrop-blur-md {
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-  }
-  .backdrop-blur-sm {
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
-  }
-  .backdrop-blur-lg {
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
-  }
-}
-
-/* Fallback para navegadores sin soporte */
-@supports not (backdrop-filter: blur(12px)) {
-  .backdrop-blur-md {
-    background-color: rgba(5, 8, 22, 0.95) !important;
-  }
-}
-
+/* Paleta de colores SpaceNode */
 :root {
+  /* Colores principales */
+  --space-deep: #0A0E27;
+  --space-nebula: #141B3D;
+  --space-cosmos: #050816;
+  --cyan-core: #00D9FF;
+  --electric-blue: #3B82F6;
+  --aurora-mint: #7DD3C0;
+  
+  /* Colores de texto */
+  --slate-200: #E2E8F0;
+  --slate-400: #94A3B8;
+  --slate-600: #475569;
+  
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: dark;
-  color: #E2E8F0;
-  background-color: #0A0E27;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -44,5 +27,64 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--space-deep);
+  color: var(--slate-200);
+}
+
+/* Clases personalizadas para el tema espacial */
+.bg-space-deep {
+  background-color: var(--space-deep) !important;
+}
+
+.bg-space-nebula {
+  background-color: var(--space-nebula) !important;
+}
+
+.bg-space-cosmos {
+  background-color: var(--space-cosmos) !important;
+}
+
+.text-cyan-core {
+  color: var(--cyan-core) !important;
+}
+
+.text-slate-200 {
+  color: var(--slate-200) !important;
+}
+
+.text-slate-400 {
+  color: var(--slate-400) !important;
+}
+
+/* Glassmorphism */
+.glass-effect {
+  background: rgba(5, 8, 22, 0.7) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Gradientes */
+.gradient-cta {
+  background: linear-gradient(90deg, var(--cyan-core) 0%, var(--electric-blue) 100%) !important;
+  border: none !important;
+}
+
+/* Transiciones suaves */
+.transition-all {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover effects para enlaces */
+a.text-slate-400:hover {
+  color: var(--cyan-core) !important;
+}
+
+/* Estilos para Bootstrap Navbar */
+.navbar-toggler {
+  border-color: var(--slate-600) !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(226, 232, 240, 0.75)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 

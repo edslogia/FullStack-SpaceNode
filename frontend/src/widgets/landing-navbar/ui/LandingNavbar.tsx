@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Navbar, Container, Nav } from 'react-bootstrap';
+import './LandingNavbar.css';
 
 /**
  * LandingNavbar Widget - Navbar translúcido con efecto glassmorphism
@@ -20,55 +22,52 @@ export const LandingNavbar = () => {
   }, []);
 
   return (
-    <nav
-      className={`
-        fixed top-0 left-0 right-0 z-50 h-16
-        transition-all duration-300 ease-in-out
-        ${isScrolled 
-          ? 'bg-space-cosmos/70 backdrop-blur-md border-b border-slate-600/20 shadow-glass' 
-          : 'bg-transparent border-b border-transparent'
-        }
-      `}
+    <Navbar 
+      fixed="top" 
+      expand="md"
+      className={`py-3 ${isScrolled ? 'glass-effect border-bottom border-secondary' : 'bg-transparent'}`}
+      style={{ minHeight: '64px' }}
     >
-      <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+      <Container fluid className="px-4">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 bg-gradient-cta rounded-lg transition-transform group-hover:scale-110" />
-          <span className="text-xl font-bold text-slate-200 transition-colors group-hover:text-cyan-core">
+        <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+          <div 
+            className="gradient-cta rounded"
+            style={{ width: '32px', height: '32px' }}
+          />
+          <span className="fs-5 fw-bold text-slate-200">
             SpaceNode
           </span>
-        </Link>
+        </Navbar.Brand>
 
-        {/* Navegación central (desktop) */}
-        <div className="hidden md:flex items-center gap-8">
-          <a 
-            href="#features" 
-            className="text-slate-400 hover:text-cyan-core transition-colors duration-200 font-medium"
-          >
-            Características
-          </a>
-          <a 
-            href="#pricing" 
-            className="text-slate-400 hover:text-cyan-core transition-colors duration-200 font-medium"
-          >
-            Pricing
-          </a>
-        </div>
+        <Navbar.Toggle aria-controls="navbar-nav" className="border-0" />
+        
+        <Navbar.Collapse id="navbar-nav">
+          {/* Navegación central */}
+          <Nav className="mx-auto">
+            <Nav.Link 
+              href="#features" 
+              className="text-slate-400 fw-medium px-3"
+            >
+              Características
+            </Nav.Link>
+            <Nav.Link 
+              href="#pricing" 
+              className="text-slate-400 fw-medium px-3"
+            >
+              Pricing
+            </Nav.Link>
+          </Nav>
 
-        {/* CTA Login */}
-        <Link
-          to="/login"
-          className="
-            px-6 py-2 rounded-lg font-semibold
-            bg-gradient-cta text-space-deep
-            hover:shadow-lg hover:shadow-cyan-core/30
-            hover:scale-105
-            transition-all duration-300
-          "
-        >
-          Login
-        </Link>
-      </div>
-    </nav>
+          {/* CTA Login */}
+          <Link
+            to="/login"
+            className="btn fw-semibold gradient-cta text-white px-4 py-2"
+          >
+            Login
+          </Link>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };

@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 import { MainLayout } from './app/layouts'
 
@@ -12,9 +13,9 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: (
-          <div className="min-h-screen flex items-center justify-center">
+          <div className="min-vh-100 d-flex align-items-center justify-content-center">
             <div className="text-center">
-              <h1 className="text-4xl font-bold text-slate-200 mb-4">
+              <h1 className="display-4 fw-bold text-slate-200 mb-4">
                 SpaceNode
               </h1>
               <p className="text-slate-400">
@@ -27,9 +28,9 @@ const router = createBrowserRouter([
       {
         path: '/login',
         element: (
-          <div className="min-h-screen flex items-center justify-center">
+          <div className="min-vh-100 d-flex align-items-center justify-content-center">
             <div className="text-center">
-              <h1 className="text-3xl font-bold text-slate-200 mb-4">
+              <h1 className="display-5 fw-bold text-slate-200 mb-4">
                 Login
               </h1>
               <p className="text-slate-400">

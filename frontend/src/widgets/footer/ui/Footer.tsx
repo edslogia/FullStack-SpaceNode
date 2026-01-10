@@ -1,48 +1,57 @@
+import { Container, Row, Col } from 'react-bootstrap';
+import './Footer.css';
+
 /**
  * Footer Widget - Componente de pie de página global
  * Aparece solo al final del contenido, no es fixed
  */
 
-export const Footer = () => {
+const Footer: React.FC = () => {
   return (
-    <footer className="bg-space-cosmos border-t border-slate-600/20">
-      <div className="max-w-7xl mx-auto px-6 py-8">
+    <footer className="bg-space-cosmos border-top">
+      <Container fluid className="px-4 py-4">
         {/* Contenido principal */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-slate-400 text-sm">
-            © 2026 SpaceNode. Telemetría industrial para el futuro.
-          </p>
-          
+        <Row className="align-items-center g-3">
+          <Col xs={12} md={6} className="text-center text-md-start">
+            <p className="text-slate-400 small mb-0">
+              © 2026 SpaceNode. Telemetría industrial para el futuro.
+            </p>
+          </Col>
           {/* Enlaces legales */}
-          <div className="flex gap-6 text-sm">
-            <a 
-              href="/terminos" 
-              className="text-slate-400 hover:text-cyan-core transition-colors duration-200"
-            >
-              Términos
-            </a>
-            <a 
-              href="/privacidad" 
-              className="text-slate-400 hover:text-cyan-core transition-colors duration-200"
-            >
-              Privacidad
-            </a>
-            <a 
-              href="/contacto" 
-              className="text-slate-400 hover:text-cyan-core transition-colors duration-200"
-            >
-              Contacto
-            </a>
-          </div>
-        </div>
-
+          <Col xs={12} md={6}>
+            <div className="d-flex gap-3 justify-content-center justify-content-md-end small">
+              <a 
+                href="/terminos" 
+                className="text-slate-400 text-decoration-none footer-link"
+              >
+                Términos
+              </a>
+              <a 
+                href="/privacidad" 
+                className="text-slate-400 text-decoration-none footer-link"
+              >
+                Privacidad
+              </a>
+              <a 
+                href="/contacto" 
+                className="text-slate-400 text-decoration-none footer-link"
+              >
+                Contacto
+              </a>
+            </div>
+          </Col>
+        </Row>
         {/* Tagline */}
-        <div className="mt-4 text-center">
-          <p className="text-slate-600 text-xs">
-            Hecho con 🚀 para la industria IoT
-          </p>
-        </div>
-      </div>
+        <Row className="mt-3">
+          <Col className="text-center">
+            <p className="text-muted mb-0" style={{ fontSize: '0.75rem' }}>
+              Hecho con 🚀 para la industria IoT
+            </p>
+          </Col>
+        </Row>
+      </Container>
     </footer>
   );
 };
+
+export default Footer;

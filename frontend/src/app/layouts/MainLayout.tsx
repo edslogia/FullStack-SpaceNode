@@ -10,12 +10,12 @@ import { Footer } from '@/widgets/footer';
 
 export const MainLayout = () => {
   return (
-    <div className="min-h-screen bg-space-deep flex flex-col">
+    <div className="min-vh-100 bg-space-deep d-flex flex-column">
       {/* Navbar fijo en top */}
       <LandingNavbar />
       
       {/* Contenido principal con padding-top para compensar navbar fixed */}
-      <main className="flex-1 pt-16">
+      <main className="flex-grow-1" style={{ paddingTop: '64px' }}>
         <Outlet />
       </main>
       

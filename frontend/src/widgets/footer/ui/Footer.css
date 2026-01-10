@@ -1,0 +1,23 @@
+.bg-space-cosmos {
+  background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+}
+
+.text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+.text-muted {
+  color: #64748b !important;
+}
+
+.border-top {
+  border-top: 1px solid rgba(71, 85, 105, 0.2) !important;
+}
+
+.footer-link {
+  transition: color 0.2s;
+}
+
+.footer-link:hover {
+  color: #0ea5e9 !important;
+}
