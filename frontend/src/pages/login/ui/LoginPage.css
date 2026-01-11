@@ -15,7 +15,7 @@
 .login-form {
   min-width: 320px;
   max-width: 380px;
-  border: 1px solid var(--slate-400);
+  border: 2px solid var(--slate-400);
   background: var(--space-nebula);
 }
 
@@ -26,18 +26,29 @@
 
 .login-form .form-control {
   font-size: 1.1rem;
+  border-radius: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.login-form .input-group .input-group-text {
+  border-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .login-form .btn-primary {
   background: var(--space-nebula);
-  border: 1px solid var(--slate-400);
-  font-weight: 500;
+  border: 2px solid var(--slate-400);
+  font-weight: 600;
   transition: background 0.2s;
+  border-radius: 0;
+  color: var(--slate-50);
 }
 
 .login-form .btn-primary:hover {
-  background: var(--electric-blue-dark);
-  color: var(--slate-100);
+  background: var(--slate-800);
+  border-color: var(--electric-blue-dark);
 }
 
 /* Mejora de responsividad para móviles ultra pequeños */

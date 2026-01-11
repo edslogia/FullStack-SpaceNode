@@ -58,26 +58,6 @@ body {
 }
 
 /* Clases personalizadas para el tema espacial */
-.bg-space-deep {
-  background-color: var(--space-deep) !important;
-}
-
-.bg-space-nebula {
-  background-color: var(--space-nebula) !important;
-}
-
-.bg-space-cosmos {
-  background-color: var(--space-cosmos) !important;
-}
-
-.text-cyan-core {
-  color: var(--cyan-core) !important;
-}
-
-.text-slate-200 {
-  color: var(--slate-200) !important;
-}
-
 .text-slate-400 {
   color: var(--slate-400) !important;
 }

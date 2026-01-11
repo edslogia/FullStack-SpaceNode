@@ -1,3 +1,11 @@
+/* Colores y utilidades para Footer */
+.text-slate-200 {
+  color: var(--slate-200) !important;
+}
+
+.text-slate-400 {
+  color: var(--slate-400) !important;
+}
 
 .bg-footer-gradient {
   background: linear-gradient(90deg, var(--space-deep) 0%, var(--space-nebula) 100%) !important;

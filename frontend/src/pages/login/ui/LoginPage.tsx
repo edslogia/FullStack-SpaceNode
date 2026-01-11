@@ -9,7 +9,7 @@ import "./LoginPage.css";
 function LoginPage() {
   return (
     <div className="login-page-container d-flex justify-content-center align-items-center vh-100">
-      <Form className="login-form p-4 rounded shadow">
+      <Form className="login-form p-4 shadow">
         <h2 className="mb-4 text-center">Iniciar sesión</h2>
         <InputGroup className="mb-3">
           <InputGroup.Text id="login-username-addon">
@@ -35,7 +35,7 @@ function LoginPage() {
             autoComplete="current-password"
           />
         </InputGroup>
-        <Button variant="primary" type="submit" className="w-100 mt-2">
+        <Button type="submit" className="w-100 mt-2">
            Ingresar
           <> <BsStars /></>
         </Button>
