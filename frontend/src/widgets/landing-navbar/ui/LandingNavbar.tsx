@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { FaUserAstronaut } from "react-icons/fa";
+import { IoMdExit } from "react-icons/io";
 import "./LandingNavbar.css";
 
 /**
@@ -10,6 +11,13 @@ import "./LandingNavbar.css";
 
 export const LandingNavbar = () => {
   // Sin animaciones ni efecto glassmorphism
+
+  const isLoggedIn = Boolean(window.localStorage.getItem("accessToken"));
+
+  const handleLogout = () => {
+    window.localStorage.removeItem("accessToken");
+    window.location.href = "/login";
+  };
 
   return (
     <Navbar
@@ -45,16 +53,32 @@ export const LandingNavbar = () => {
             </Nav.Link>
           </Nav>
 
-          {/* CTA Login */}
-          <Link
-            to="/login"
-            className="navbar-login-btn d-flex align-items-center fw-semibold text-white px-4"
-          >
-            <span className="navbar-login-icon d-flex align-items-center justify-content-center me-2">
-              <FaUserAstronaut/>
-            </span>
-            Ingresar
-          </Link>
+          {/* CTA Login/Logout */}
+          {isLoggedIn ? (
+            <Link
+              to="/login"
+              className="navbar-login-btn d-flex align-items-center fw-semibold text-white px-4"
+              onClick={e => {
+                e.preventDefault();
+                handleLogout();
+              }}
+            >
+              <span className="navbar-login-icon d-flex align-items-center justify-content-center me-2">
+                <IoMdExit />
+              </span>
+              Salir
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="navbar-login-btn d-flex align-items-center fw-semibold text-white px-4"
+            >
+              <span className="navbar-login-icon d-flex align-items-center justify-content-center me-2">
+                <FaUserAstronaut />
+              </span>
+              Ingresar
+            </Link>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>
