@@ -51,3 +51,5 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
+  //npm run prisma:seed
