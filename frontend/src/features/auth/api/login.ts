@@ -11,6 +11,7 @@ export interface LoginResponse {
     email: string;
     fullName: string;
     hasChangedPassword: boolean;
+    type: "admin" | "operator";
   };
 }
 

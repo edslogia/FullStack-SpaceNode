@@ -98,7 +98,10 @@ function LoginPage() {
         return;
       }
       setUser(res.user);
-      window.location.href = "/dashboard-admin";
+      // Redirigir según el rol del usuario
+      const dashboardRoute =
+        res.user.type === "admin" ? "/dashboard-admin" : "/dashboard-operator";
+      window.location.href = dashboardRoute;
     } catch (err: any) {
       setError(err.message || "Error de autenticación");
     } finally {
@@ -138,7 +141,10 @@ function LoginPage() {
       window.localStorage.setItem("accessToken", res.accessToken);
       window.localStorage.setItem("user", JSON.stringify(res.user));
       setUser(res.user);
-      window.location.href = "/dashboard-admin";
+      // Redirigir según el rol del usuario
+      const dashboardRoute =
+        res.user.type === "admin" ? "/dashboard-admin" : "/dashboard-operator";
+      window.location.href = dashboardRoute;
     } catch (err: any) {
       setError(err.message || "Error al cambiar la contraseña");
     } finally {

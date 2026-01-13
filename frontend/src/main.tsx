@@ -7,6 +7,7 @@ import "./index.css";
 import { MainLayout } from "./app/layouts";
 import { LoginPage } from "./pages/login";
 import { DashboardAdminPage } from "./pages/dashboard-admin";
+import { DashboardOperatorPage } from "./pages/dashboard-operator";
 import PrivateRoute from "./shared/ui/PrivateRoute";
 
 // Configuración temporal del router
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
           {
             path: "/dashboard-admin",
             element: <DashboardAdminPage />,
+          },
+          {
+            path: "/dashboard-operator",
+            element: <DashboardOperatorPage />,
           },
         ],
       },
