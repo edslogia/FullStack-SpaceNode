@@ -10,6 +10,7 @@ export interface LoginResponse {
     username: string;
     email: string;
     fullName: string;
+    hasChangedPassword: boolean;
   };
 }
 

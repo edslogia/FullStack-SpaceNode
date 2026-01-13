@@ -1,9 +1,11 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, type ReactNode } from "react";
 
 export interface User {
+  id: number;
   fullName: string;
   email: string;
   username: string;
+  hasChangedPassword: boolean;
 }
 
 interface UserContextType {
