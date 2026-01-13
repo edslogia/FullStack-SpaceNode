@@ -161,174 +161,184 @@ function LoginPage() {
   if (mustChangePassword) {
     return (
       <div className="login-page-container d-flex justify-content-center align-items-center vh-100">
-        <Form className="login-form p-4 shadow" onSubmit={handleChangePassword}>
-          <h2 className="mb-3 text-center">Cambiar Contraseña</h2>
-          <Alert variant="warning" className="py-2 mb-3">
-            <small>
-              Por seguridad, debes cambiar tu contraseña antes de continuar.
-            </small>
-          </Alert>
+        <div className="password-change-container d-flex gap-3">
+          <Form
+            className="login-form p-4 shadow"
+            onSubmit={handleChangePassword}
+          >
+            <h2 className="mb-3 text-center">Cambiar Contraseña</h2>
+            <Alert variant="warning" className="py-2 mb-3">
+              <small>
+                Por seguridad, debes cambiar tu contraseña antes de continuar.
+              </small>
+            </Alert>
 
-          <InputGroup className="mb-3">
-            <InputGroup.Text>
-              <FaUserAstronaut className="icon-input" />
-            </InputGroup.Text>
-            <Form.Control
-              placeholder="Usuario"
-              type="text"
-              value={username}
-              disabled
-            />
-          </InputGroup>
+            <InputGroup className="mb-3">
+              <InputGroup.Text>
+                <FaUserAstronaut className="icon-input" />
+              </InputGroup.Text>
+              <Form.Control
+                placeholder="Usuario"
+                type="text"
+                value={username}
+                disabled
+              />
+            </InputGroup>
 
-          <InputGroup className="mb-3">
-            <InputGroup.Text>
-              <FaLock className="icon-input" />
-            </InputGroup.Text>
-            <Form.Control
-              placeholder="Nueva contraseña"
-              type="password"
-              autoComplete="new-password"
-              value={newPassword}
-              onChange={(e) => handleNewPasswordChange(e.target.value)}
-              disabled={loading}
-            />
-          </InputGroup>
+            <InputGroup className="mb-3">
+              <InputGroup.Text>
+                <FaLock className="icon-input" />
+              </InputGroup.Text>
+              <Form.Control
+                placeholder="Nueva contraseña"
+                type="password"
+                autoComplete="new-password"
+                value={newPassword}
+                onChange={(e) => handleNewPasswordChange(e.target.value)}
+                disabled={loading}
+              />
+            </InputGroup>
 
-          {newPassword && (
+            <InputGroup className="mb-3">
+              <InputGroup.Text>
+                <IoKeypad className="icon-input" />
+              </InputGroup.Text>
+              <Form.Control
+                placeholder="Confirmar contraseña"
+                type="password"
+                autoComplete="new-password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                disabled={loading}
+              />
+            </InputGroup>
+
+            {confirmPassword && (
+              <div className="mb-2">
+                {newPassword === confirmPassword ? (
+                  <small className="text-success">
+                    <FaCheckCircle /> Las contraseñas coinciden
+                  </small>
+                ) : (
+                  <small className="text-danger">
+                    <FaTimesCircle /> Las contraseñas no coinciden
+                  </small>
+                )}
+              </div>
+            )}
+
+            {error && (
+              <Alert variant="danger" className="py-2 mb-2">
+                {error}
+              </Alert>
+            )}
+
+            <Button type="submit" className="w-100 mt-2" disabled={loading}>
+              {loading ? "Actualizando..." : "Actualizar Contraseña"}{" "}
+              <BsStars />
+            </Button>
+          </Form>
+
+          {/* Cuadro flotante con información de requisitos */}
+          <div className="password-helper-box shadow">
+            <h6 className="mb-3 text-center">Requisitos de Seguridad</h6>
+
             <div className="mb-3">
-              <div className="d-flex justify-content-between align-items-center mb-1">
+              <div className="d-flex justify-content-between align-items-center mb-2">
                 <small className="text-muted">Fortaleza:</small>
-                <small className={`text-${passwordStrength.variant}`}>
-                  <strong>{passwordStrength.label}</strong>
+                <small className={`text-${passwordStrength.variant} fw-bold`}>
+                  {passwordStrength.label}
                 </small>
               </div>
               <ProgressBar
                 now={passwordStrength.score}
                 variant={passwordStrength.variant}
-                className="mb-2"
-                style={{ height: "8px" }}
+                style={{ height: "10px" }}
               />
-              <div className="password-requirements">
-                <small className="d-block mb-1">
-                  <strong>Requisitos:</strong>
-                </small>
-                <small
-                  className={
-                    passwordStrength.requirements.minLength
-                      ? "text-success"
-                      : "text-danger"
-                  }
-                >
-                  {passwordStrength.requirements.minLength ? (
-                    <FaCheckCircle />
-                  ) : (
-                    <FaTimesCircle />
-                  )}{" "}
-                  Mínimo 8 caracteres
-                </small>
-                <br />
-                <small
-                  className={
-                    passwordStrength.requirements.hasUpperCase
-                      ? "text-success"
-                      : "text-danger"
-                  }
-                >
-                  {passwordStrength.requirements.hasUpperCase ? (
-                    <FaCheckCircle />
-                  ) : (
-                    <FaTimesCircle />
-                  )}{" "}
-                  Al menos 1 mayúscula
-                </small>
-                <br />
-                <small
-                  className={
-                    passwordStrength.requirements.hasLowerCase
-                      ? "text-success"
-                      : "text-danger"
-                  }
-                >
-                  {passwordStrength.requirements.hasLowerCase ? (
-                    <FaCheckCircle />
-                  ) : (
-                    <FaTimesCircle />
-                  )}{" "}
-                  Al menos 1 minúscula
-                </small>
-                <br />
-                <small
-                  className={
-                    passwordStrength.requirements.hasNumber
-                      ? "text-success"
-                      : "text-danger"
-                  }
-                >
-                  {passwordStrength.requirements.hasNumber ? (
-                    <FaCheckCircle />
-                  ) : (
-                    <FaTimesCircle />
-                  )}{" "}
-                  Al menos 1 número
-                </small>
-                <br />
-                <small
-                  className={
-                    passwordStrength.requirements.hasSpecial
-                      ? "text-success"
-                      : "text-danger"
-                  }
-                >
-                  {passwordStrength.requirements.hasSpecial ? (
-                    <FaCheckCircle />
-                  ) : (
-                    <FaTimesCircle />
-                  )}{" "}
-                  Al menos 1 carácter especial (@$!%*?&#_-)
-                </small>
-              </div>
             </div>
-          )}
+            <hr className="my-3" />
 
-          <InputGroup className="mb-3">
-            <InputGroup.Text>
-              <IoKeypad className="icon-input" />
-            </InputGroup.Text>
-            <Form.Control
-              placeholder="Confirmar contraseña"
-              type="password"
-              autoComplete="new-password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              disabled={loading}
-            />
-          </InputGroup>
-
-          {confirmPassword && (
-            <div className="mb-2">
-              {newPassword === confirmPassword ? (
-                <small className="text-success">
-                  <FaCheckCircle /> Las contraseñas coinciden
-                </small>
-              ) : (
-                <small className="text-danger">
-                  <FaTimesCircle /> Las contraseñas no coinciden
-                </small>
-              )}
+            <div className="password-requirements">
+              <small className="d-block mb-2 fw-bold text-light">
+                Tu contraseña debe tener:
+              </small>
+              <small
+                className={
+                  passwordStrength.requirements.minLength
+                    ? "text-success"
+                    : "text-muted"
+                }
+              >
+                {passwordStrength.requirements.minLength ? (
+                  <FaCheckCircle />
+                ) : (
+                  <FaTimesCircle />
+                )}{" "}
+                Mínimo 8 caracteres
+              </small>
+              <br />
+              <small
+                className={
+                  passwordStrength.requirements.hasUpperCase
+                    ? "text-success"
+                    : "text-muted"
+                }
+              >
+                {passwordStrength.requirements.hasUpperCase ? (
+                  <FaCheckCircle />
+                ) : (
+                  <FaTimesCircle />
+                )}{" "}
+                Al menos 1 mayúscula
+              </small>
+              <br />
+              <small
+                className={
+                  passwordStrength.requirements.hasLowerCase
+                    ? "text-success"
+                    : "text-muted"
+                }
+              >
+                {passwordStrength.requirements.hasLowerCase ? (
+                  <FaCheckCircle />
+                ) : (
+                  <FaTimesCircle />
+                )}{" "}
+                Al menos 1 minúscula
+              </small>
+              <br />
+              <small
+                className={
+                  passwordStrength.requirements.hasNumber
+                    ? "text-success"
+                    : "text-muted"
+                }
+              >
+                {passwordStrength.requirements.hasNumber ? (
+                  <FaCheckCircle />
+                ) : (
+                  <FaTimesCircle />
+                )}{" "}
+                Al menos 1 número
+              </small>
+              <br />
+              <small
+                className={
+                  passwordStrength.requirements.hasSpecial
+                    ? "text-success"
+                    : "text-muted"
+                }
+              >
+                {passwordStrength.requirements.hasSpecial ? (
+                  <FaCheckCircle />
+                ) : (
+                  <FaTimesCircle />
+                )}{" "}
+                Al menos 1 carácter especial (@$!%*?&#_-)
+              </small>
             </div>
-          )}
-
-          {error && (
-            <Alert variant="danger" className="py-2 mb-2">
-              {error}
-            </Alert>
-          )}
-
-          <Button type="submit" className="w-100 mt-2" disabled={loading}>
-            {loading ? "Actualizando..." : "Actualizar Contraseña"} <BsStars />
-          </Button>
-        </Form>
+          </div>
+        </div>
       </div>
     );
   }
