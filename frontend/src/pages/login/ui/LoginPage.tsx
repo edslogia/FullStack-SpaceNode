@@ -2,7 +2,8 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
-import ProgressBar from "react-bootstrap/ProgressBar";
+import PasswordHelperBox from "@/features/auth/ui/PasswordHelperBox";
+import type { PasswordStrength } from "@/features/auth/model/types";
 import {
   FaUserAstronaut,
   FaLock,
@@ -17,18 +18,6 @@ import { login } from "@/features/auth/api/login";
 import { changePassword } from "@/features/auth/api/change-password";
 import "./LoginPage.css";
 
-interface PasswordStrength {
-  score: number;
-  label: string;
-  variant: "danger" | "warning" | "info" | "success";
-  requirements: {
-    minLength: boolean;
-    hasUpperCase: boolean;
-    hasLowerCase: boolean;
-    hasNumber: boolean;
-    hasSpecial: boolean;
-  };
-}
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -239,105 +228,7 @@ function LoginPage() {
             </Button>
           </Form>
 
-          {/* Cuadro flotante con información de requisitos */}
-          <div className="password-helper-box shadow">
-            <h6 className="mb-3 text-center">Requisitos de Seguridad</h6>
-
-            <div className="mb-3">
-              <div className="d-flex justify-content-between align-items-center mb-2">
-                <small className="text-muted">Fortaleza:</small>
-                <small className={`text-${passwordStrength.variant} fw-bold`}>
-                  {passwordStrength.label}
-                </small>
-              </div>
-              <ProgressBar
-                now={passwordStrength.score}
-                variant={passwordStrength.variant}
-                style={{ height: "10px" }}
-              />
-            </div>
-            <hr className="my-3" />
-
-            <div className="password-requirements">
-              <small className="d-block mb-2 fw-bold text-light">
-                Tu contraseña debe tener:
-              </small>
-              <small
-                className={
-                  passwordStrength.requirements.minLength
-                    ? "text-success"
-                    : "text-muted"
-                }
-              >
-                {passwordStrength.requirements.minLength ? (
-                  <FaCheckCircle />
-                ) : (
-                  <FaTimesCircle />
-                )}{" "}
-                Mínimo 8 caracteres
-              </small>
-              <br />
-              <small
-                className={
-                  passwordStrength.requirements.hasUpperCase
-                    ? "text-success"
-                    : "text-muted"
-                }
-              >
-                {passwordStrength.requirements.hasUpperCase ? (
-                  <FaCheckCircle />
-                ) : (
-                  <FaTimesCircle />
-                )}{" "}
-                Al menos 1 mayúscula
-              </small>
-              <br />
-              <small
-                className={
-                  passwordStrength.requirements.hasLowerCase
-                    ? "text-success"
-                    : "text-muted"
-                }
-              >
-                {passwordStrength.requirements.hasLowerCase ? (
-                  <FaCheckCircle />
-                ) : (
-                  <FaTimesCircle />
-                )}{" "}
-                Al menos 1 minúscula
-              </small>
-              <br />
-              <small
-                className={
-                  passwordStrength.requirements.hasNumber
-                    ? "text-success"
-                    : "text-muted"
-                }
-              >
-                {passwordStrength.requirements.hasNumber ? (
-                  <FaCheckCircle />
-                ) : (
-                  <FaTimesCircle />
-                )}{" "}
-                Al menos 1 número
-              </small>
-              <br />
-              <small
-                className={
-                  passwordStrength.requirements.hasSpecial
-                    ? "text-success"
-                    : "text-muted"
-                }
-              >
-                {passwordStrength.requirements.hasSpecial ? (
-                  <FaCheckCircle />
-                ) : (
-                  <FaTimesCircle />
-                )}{" "}
-                Al menos 1 carácter especial (@$!%*?&#_-)
-              </small>
-            </div>
-          </div>
+          <PasswordHelperBox passwordStrength={passwordStrength} />
         </div>
       </div>
     );
