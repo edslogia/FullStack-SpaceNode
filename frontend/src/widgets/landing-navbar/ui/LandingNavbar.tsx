@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { FaUserAstronaut } from "react-icons/fa";
 import { IoMdExit } from "react-icons/io";
+import { useUser } from "@/shared/model/user-context";
 import "./LandingNavbar.css";
 
 /**
@@ -13,9 +14,11 @@ export const LandingNavbar = () => {
   // Sin animaciones ni efecto glassmorphism
 
   const isLoggedIn = Boolean(window.localStorage.getItem("accessToken"));
+  const { user } = useUser();
 
   const handleLogout = () => {
     window.localStorage.removeItem("accessToken");
+    window.localStorage.removeItem("user");
     window.location.href = "/login";
   };
 
@@ -52,6 +55,13 @@ export const LandingNavbar = () => {
               Pricing
             </Nav.Link>
           </Nav>
+
+          {/* Username visible si logueado */}
+          {isLoggedIn && user?.username && (
+            <span className="navbar-username text-slate-300 fw-semibold px-3">
+              {user.username}
+            </span>
+          )}
 
           {/* CTA Login/Logout */}
           {isLoggedIn ? (

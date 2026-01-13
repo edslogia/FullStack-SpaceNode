@@ -5,6 +5,7 @@ import { FaUserAstronaut } from "react-icons/fa";
 import { IoKeypad } from "react-icons/io5";
 import { BsStars } from "react-icons/bs";
 import { useState } from "react";
+import { useUser } from "@/shared/model/user-context";
 import { login } from "@/features/auth/api/login";
 import "./LoginPage.css";
 
@@ -13,6 +14,7 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { setUser } = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +23,8 @@ function LoginPage() {
     try {
       const res = await login({ username, password });
       window.localStorage.setItem("accessToken", res.accessToken);
-      console.log("Login exitoso:", res);
+      window.localStorage.setItem("user", JSON.stringify(res.user));
+      setUser(res.user);
       // Redirigir o recargar
       window.location.href = "/dashboard-admin";
     } catch (err: any) {
