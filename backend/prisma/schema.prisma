@@ -43,6 +43,7 @@ model Customer {
 model Operator {
   id        String   @id @default(uuid())
   username  String   @unique
+  password  String   // Hash Bcrypt
   email     String   @unique
   fullName  String
   isActive  Boolean  @default(true)
@@ -88,3 +89,6 @@ model Nodo {
 
   @@map("nodos")
 }
+
+
+//npx prisma migrate dev --name add-operator-password
