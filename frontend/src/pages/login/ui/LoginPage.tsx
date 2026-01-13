@@ -23,7 +23,7 @@ function LoginPage() {
       window.localStorage.setItem("accessToken", res.accessToken);
       console.log("Login exitoso:", res);
       // Redirigir o recargar
-      window.location.href = "/login";
+      window.location.href = "/dashboard-admin";
     } catch (err: any) {
       setError(err.message || "Error de autenticación");
     } finally {
