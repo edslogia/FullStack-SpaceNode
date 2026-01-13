@@ -2,8 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { OperatorService } from './operator.service';
 import { CreateOperatorDto } from './dto/create-operator.dto';
 import { UpdateOperatorDto } from './dto/update-operator.dto';
+import { Operator } from './entities/operator.entity';
 
-@Controller('operator')
+@Controller('api/v1/operator')
 export class OperatorController {
   constructor(private readonly operatorService: OperatorService) {}
 
@@ -24,11 +25,11 @@ export class OperatorController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateOperatorDto: UpdateOperatorDto) {
-    return this.operatorService.update(+id, updateOperatorDto);
+    return this.operatorService.update(id, updateOperatorDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.operatorService.remove(+id);
+  remove(@Param('id') id: string): Promise<{ message: string; data: Omit<Operator, 'password'> }>  {
+    return this.operatorService.remove(id);
   }
 }

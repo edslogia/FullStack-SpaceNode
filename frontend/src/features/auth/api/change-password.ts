@@ -22,9 +22,13 @@ interface ChangePasswordResponse {
 export const changePassword = async (
   data: ChangePasswordData
 ): Promise<ChangePasswordResponse> => {
+  const token = window.localStorage.getItem("accessToken");
   const res = await fetch(`${API_URL}/api/v1/auth/change-password`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(data),
   });
 

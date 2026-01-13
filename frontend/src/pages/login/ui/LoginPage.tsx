@@ -18,7 +18,6 @@ import { login } from "@/features/auth/api/login";
 import { changePassword } from "@/features/auth/api/change-password";
 import "./LoginPage.css";
 
-
 function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -87,6 +86,10 @@ function LoginPage() {
     try {
       const res = await login({ username, password });
 
+      // Guardar token siempre (necesario para cambio de contraseña)
+      window.localStorage.setItem("accessToken", res.accessToken);
+      window.localStorage.setItem("user", JSON.stringify(res.user));
+
       // Verificar si debe cambiar la contraseña
       if (!res.user.hasChangedPassword) {
         setMustChangePassword(true);
@@ -94,9 +97,6 @@ function LoginPage() {
         setLoading(false);
         return;
       }
-
-      window.localStorage.setItem("accessToken", res.accessToken);
-      window.localStorage.setItem("user", JSON.stringify(res.user));
       setUser(res.user);
       window.location.href = "/dashboard-admin";
     } catch (err: any) {
