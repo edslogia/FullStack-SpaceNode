@@ -40,13 +40,6 @@ export class AuthService {
       where: { username },
     });
     if (operator && operator.isActive) {
-      // El campo password debe existir en el modelo Operator
-      // Si no existe, lanzar excepción clara
-      if (!('password' in operator)) {
-        throw new UnauthorizedException(
-          'El operador no tiene contraseña configurada',
-        );
-      }
       const passwordValid = await bcrypt.compare(
         password,
         (operator as any).password,
