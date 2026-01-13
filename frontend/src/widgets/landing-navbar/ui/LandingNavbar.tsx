@@ -58,7 +58,7 @@ export const LandingNavbar = () => {
             <Link
               to="/login"
               className="navbar-login-btn d-flex align-items-center fw-semibold text-white px-4"
-              onClick={e => {
+              onClick={(e) => {
                 e.preventDefault();
                 handleLogout();
               }}
