@@ -152,6 +152,7 @@ FullStack-SpaceNode/
 │   ├── tsconfig.build.json
 │   ├── tsconfig.json
 │   ├── prisma/
+│   │   ├── reset-password-flag.ts
 │   │   ├── schema.prisma
 │   │   ├── seed.ts
 │   │   └── migrations/
@@ -160,7 +161,9 @@ FullStack-SpaceNode/
 │   │       │   └── migration.sql
 │   │       ├── 20260109174527_add_password_change_flag/
 │   │       │   └── migration.sql
-│   │       └── 20260109215009_add_nodo_and_relations/
+│   │       ├── 20260109215009_add_nodo_and_relations/
+│   │       │   └── migration.sql
+│   │       └── 20260113192453_add_operator_password/
 │   │           └── migration.sql
 │   ├── src/
 │   │   ├── app.controller.spec.ts
@@ -170,6 +173,17 @@ FullStack-SpaceNode/
 │   │   ├── main.ts
 │   │   ├── prisma.module.ts
 │   │   ├── prisma.service.ts
+│   │   ├── auth/
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.module.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── jwt-auth.guard.ts
+│   │   │   ├── jwt.strategy.ts
+│   │   │   ├── roles.decorator.ts
+│   │   │   ├── roles.guard.ts
+│   │   │   └── dto/
+│   │   │       ├── change-password.dto.ts
+│   │   │       └── login-auth.dto.ts
 │   │   ├── customer/
 │   │   │   ├── customer.controller.spec.ts
 │   │   │   ├── customer.controller.ts
@@ -236,10 +250,18 @@ FullStack-SpaceNode/
 │   │   │   │   ├── index.ts
 │   │   │   │   └── MainLayout.tsx
 │   │   ├── assets/
+│   │   ├── features/
+│   │   │   └── auth/
+│   │   ├── pages/
+│   │   │   ├── dashboard-admin/
+│   │   │   ├── dashboard-operator/
+│   │   │   └── login/
 │   │   ├── shared/
 │   │   │   ├── config/
 │   │   │   │   ├── index.ts
 │   │   │   │   └── layout.ts
+│   │   │   ├── model/
+│   │   │   ├── ui/
 │   │   ├── widgets/
 │   │   │   ├── footer/
 │   │   │   │   ├── index.ts
