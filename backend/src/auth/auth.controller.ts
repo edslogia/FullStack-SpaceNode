@@ -18,6 +18,11 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: LoginAuthDto) {
+    console.log('📥 Login request received:', {
+      body: loginDto,
+      type: typeof loginDto,
+      keys: Object.keys(loginDto || {}),
+    });
     return this.authService.login(loginDto);
   }
 

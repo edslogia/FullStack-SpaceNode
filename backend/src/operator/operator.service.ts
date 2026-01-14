@@ -2,6 +2,7 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
+  ConflictException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma.service';
@@ -16,6 +17,12 @@ export class OperatorService {
   async create(createOperatorDto: CreateOperatorDto) {
     const { username, password, email, fullName, isActive, customerIds } =
       createOperatorDto;
+    // Prohibir username reservado 'admin'
+    if (username.trim().toLowerCase() === 'admin') {
+      throw new BadRequestException(
+        "El username 'admin' está reservado y no puede ser utilizado.",
+      );
+    }
     if (
       !username ||
       !password ||
@@ -27,6 +34,24 @@ export class OperatorService {
     ) {
       throw new BadRequestException(
         'Todos los campos son obligatorios, incluyendo customerIds.',
+      );
+    }
+    // Validar que el username no exista
+    const existingOperator = await this.prisma.operator.findUnique({
+      where: { username },
+    });
+    if (existingOperator) {
+      throw new ConflictException(
+        `El username '${username}' ya existe. Por favor, elija otro nombre de usuario.`,
+      );
+    }
+    // Validar que el email no exista
+    const existingEmail = await this.prisma.operator.findUnique({
+      where: { email },
+    });
+    if (existingEmail) {
+      throw new ConflictException(
+        `El email '${email}' ya está registrado. Por favor, utilice otro correo electrónico.`,
       );
     }
     // Encriptar contraseña
@@ -74,18 +99,24 @@ export class OperatorService {
   }
 
   async findAll() {
-    return await this.prisma.operator.findMany({
+    const operators = await this.prisma.operator.findMany({
       include: {
         customers: true,
       },
     });
+    return operators.map(({ password, ...operator }) => operator);
   }
 
-  async findOne(id: number) {
-    return await this.prisma.operator.findUnique({
+  async findOne(id: string) {
+    const operator = await this.prisma.operator.findUnique({
       where: { id: String(id) },
       include: { customers: true },
     });
+    if (!operator) {
+      throw new NotFoundException('Operador no encontrado');
+    }
+    const { password, ...data } = operator;
+    return data;
   }
 
   /**

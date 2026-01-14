@@ -1,10 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { OperatorService } from './operator.service';
 import { CreateOperatorDto } from './dto/create-operator.dto';
 import { UpdateOperatorDto } from './dto/update-operator.dto';
 import { Operator } from './entities/operator.entity';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
 
 @Controller('api/v1/operator')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('admin')
 export class OperatorController {
   constructor(private readonly operatorService: OperatorService) {}
 
@@ -20,7 +25,7 @@ export class OperatorController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.operatorService.findOne(+id);
+    return this.operatorService.findOne(id);
   }
 
   @Patch(':id')
