@@ -1,15 +1,26 @@
-
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Customer } from './entities/customer.entity';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
 
 /**
  * Controlador REST para gestión de customers.
- * Prefijo: /api/v1/customer
  */
 @Controller('api/v1/customer')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
@@ -17,7 +28,10 @@ export class CustomerController {
    * Crea un nuevo customer
    */
   @Post()
-  create(@Body() createCustomerDto: CreateCustomerDto): Promise<{ message: string; data: Customer }> {
+  @Roles('admin')
+  create(
+    @Body() createCustomerDto: CreateCustomerDto,
+  ): Promise<{ message: string; data: Customer }> {
     return this.customerService.create(createCustomerDto);
   }
 
@@ -25,6 +39,7 @@ export class CustomerController {
    * Retorna todos los customers
    */
   @Get()
+  @Roles('admin')
   findAll(): Promise<Customer[]> {
     return this.customerService.findAll();
   }
@@ -33,6 +48,7 @@ export class CustomerController {
    * Retorna un customer por id
    */
   @Get(':id')
+  @Roles('admin', 'operator')
   findOne(@Param('id') id: string): Promise<Customer> {
     return this.customerService.findOne(id);
   }
@@ -41,7 +57,11 @@ export class CustomerController {
    * Actualiza un customer por id
    */
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCustomerDto: UpdateCustomerDto): Promise<{ message: string; data: Customer }> {
+  @Roles('admin')
+  update(
+    @Param('id') id: string,
+    @Body() updateCustomerDto: UpdateCustomerDto,
+  ): Promise<{ message: string; data: Customer }> {
     return this.customerService.update(id, updateCustomerDto);
   }
 
@@ -49,7 +69,10 @@ export class CustomerController {
    * Elimina un customer por id
    */
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<{ message: string; data: Customer }> {
+  @Roles('admin')
+  remove(
+    @Param('id') id: string,
+  ): Promise<{ message: string; data: Customer }> {
     return this.customerService.remove(id);
   }
 }
