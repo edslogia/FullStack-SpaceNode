@@ -11,6 +11,7 @@ export interface User {
   email: string;
   username: string;
   hasChangedPassword: boolean;
+  type: "admin" | "operator";
 }
 
 interface UserContextType {

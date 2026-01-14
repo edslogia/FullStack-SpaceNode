@@ -16,6 +16,13 @@ export const LandingNavbar = () => {
   const isLoggedIn = Boolean(window.localStorage.getItem("accessToken"));
   const { user } = useUser();
 
+  // Determina la ruta del dashboard según el tipo de usuario
+  let dashboardRoute = "/";
+  if (isLoggedIn && user?.type) {
+    dashboardRoute =
+      user.type === "admin" ? "/dashboard-admin" : "/dashboard-operator";
+  }
+
   const handleLogout = () => {
     window.localStorage.removeItem("accessToken");
     window.localStorage.removeItem("user");
@@ -33,7 +40,7 @@ export const LandingNavbar = () => {
         {/* Logo */}
         <Navbar.Brand
           as={Link}
-          to="/"
+          to={dashboardRoute}
           className="d-flex align-items-center gap-2"
         >
           <div className="rounded" style={{ width: "32px", height: "32px" }} />
