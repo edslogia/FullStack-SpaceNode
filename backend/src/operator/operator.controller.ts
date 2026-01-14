@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { OperatorService } from './operator.service';
 import { CreateOperatorDto } from './dto/create-operator.dto';
 import { UpdateOperatorDto } from './dto/update-operator.dto';
@@ -29,12 +38,17 @@ export class OperatorController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOperatorDto: UpdateOperatorDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateOperatorDto: UpdateOperatorDto,
+  ) {
     return this.operatorService.update(id, updateOperatorDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<{ message: string; data: Omit<Operator, 'password'> }>  {
+  remove(
+    @Param('id') id: string,
+  ): Promise<{ message: string; data: Omit<Operator, 'password'> }> {
     return this.operatorService.remove(id);
   }
 }
