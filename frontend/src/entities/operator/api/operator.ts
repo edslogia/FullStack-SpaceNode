@@ -31,3 +31,31 @@ export async function getAllOperators(): Promise<Operator[]> {
 
   return response.json();
 }
+
+/**
+ * Actualiza el estado (isActive) de un operator.
+ * Requiere autenticación con rol 'admin'.
+ */
+export async function updateOperatorStatus(
+  id: string,
+  isActive: boolean
+): Promise<Operator> {
+  const token = window.localStorage.getItem("accessToken");
+
+  const response = await fetch(`/api/v1/operator/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ isActive }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.message || "Error al actualizar estado del operador");
+  }
+
+  const result = await response.json();
+  return result.data;
+}

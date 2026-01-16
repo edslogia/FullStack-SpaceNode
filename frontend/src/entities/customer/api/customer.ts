@@ -90,3 +90,31 @@ export async function getCustomerById(id: string): Promise<CustomerDetail> {
 
   return response.json();
 }
+
+/**
+ * Actualiza el estado (isActive) de un customer.
+ * Requiere autenticación con rol 'admin'.
+ */
+export async function updateCustomerStatus(
+  id: string,
+  isActive: boolean
+): Promise<Customer> {
+  const token = window.localStorage.getItem("accessToken");
+
+  const response = await fetch(`/api/v1/customer/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ isActive }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.message || "Error al actualizar estado del cliente");
+  }
+
+  const result = await response.json();
+  return result.data;
+}

@@ -1,0 +1,40 @@
+.customer-operator-item.list-group-item-action:hover, 
+.customer-operator-item.list-group-item-action:focus {
+  background: var(--slate-700);
+  color: var(--slate-100);
+  text-decoration: none;
+}
+
+.customer-operator-item.list-group-item-action {
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+/* Botón de toggle de estado (badge clicable) */
+.status-toggle-btn {
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.status-toggle-btn:hover:not(:disabled) {
+  opacity: 0.85;
+  transform: scale(1.05);
+}
+
+.status-toggle-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Animación de pulso mientras se actualiza el estado */
+.status-updating {
+  animation: pulse-status 0.8s ease-in-out infinite;
+}
+
+@keyframes pulse-status {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}

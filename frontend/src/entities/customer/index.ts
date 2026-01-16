@@ -1,6 +1,7 @@
 export {
   getAllCustomers,
   getCustomerById,
+  updateCustomerStatus,
   type Customer,
   type CustomerDetail,
   type CustomerOperator,

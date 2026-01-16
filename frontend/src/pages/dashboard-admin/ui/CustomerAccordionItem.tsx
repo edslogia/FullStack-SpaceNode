@@ -1,16 +1,29 @@
 import { useState } from "react";
-import { useCustomerDetail, type Customer } from "@/entities/customer";
+import "./CustomerAccordionItem.css";
+import {
+  useCustomerDetail,
+  updateCustomerStatus,
+  type Customer,
+} from "@/entities/customer";
+import { updateOperatorStatus } from "@/entities/operator";
 
 interface CustomerAccordionItemProps {
   customer: Customer;
   index: number;
+  onCustomerStatusChange?: (customerId: string, newStatus: boolean) => void;
 }
 
 export function CustomerAccordionItem({
   customer,
-  index,
+  onCustomerStatusChange,
 }: CustomerAccordionItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [customerStatus, setCustomerStatus] = useState(customer.isActive);
+  const [operatorStatuses, setOperatorStatuses] = useState<
+    Record<string, boolean>
+  >({});
+  const [updatingCustomer, setUpdatingCustomer] = useState(false);
+  const [updatingOperator, setUpdatingOperator] = useState<string | null>(null);
   const { detail, loading, error, fetchDetail } = useCustomerDetail();
 
   const handleToggle = async () => {
@@ -18,6 +31,44 @@ export function CustomerAccordionItem({
       await fetchDetail(customer.id);
     }
     setIsExpanded(!isExpanded);
+  };
+
+  const handleCustomerStatusToggle = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setUpdatingCustomer(true);
+    try {
+      const newStatus = !customerStatus;
+      await updateCustomerStatus(customer.id, newStatus);
+      setCustomerStatus(newStatus);
+      onCustomerStatusChange?.(customer.id, newStatus);
+    } catch (err) {
+      console.error("Error al actualizar estado del cliente:", err);
+    } finally {
+      setUpdatingCustomer(false);
+    }
+  };
+
+  const handleOperatorStatusToggle = async (
+    operatorId: string,
+    currentStatus: boolean
+  ) => {
+    setUpdatingOperator(operatorId);
+    try {
+      const newStatus = !currentStatus;
+      await updateOperatorStatus(operatorId, newStatus);
+      setOperatorStatuses((prev) => ({ ...prev, [operatorId]: newStatus }));
+    } catch (err) {
+      console.error("Error al actualizar estado del operador:", err);
+    } finally {
+      setUpdatingOperator(null);
+    }
+  };
+
+  const getOperatorStatus = (
+    operatorId: string,
+    defaultStatus: boolean
+  ): boolean => {
+    return operatorStatuses[operatorId] ?? defaultStatus;
   };
 
   return (
@@ -32,7 +83,18 @@ export function CustomerAccordionItem({
           <div className="d-flex w-100 align-items-center">
             <strong>{customer.fullName}</strong>
             <span className="ms-2 text-muted">({customer.username})</span>
-            <div className="ms-auto me-3">
+            <button
+              type="button"
+              className={`badge ms-3 border-0 status-toggle-btn ${
+                customerStatus ? "bg-success" : "bg-secondary"
+              } ${updatingCustomer ? "status-updating" : ""}`}
+              onClick={handleCustomerStatusToggle}
+              disabled={updatingCustomer}
+              title={`Clic para ${customerStatus ? "desactivar" : "activar"}`}
+            >
+              {customerStatus ? "Activo" : "Inactivo"}
+            </button>
+            <div className="ms-auto me-3 d-flex align-items-center">
               <span className="badge bg-info me-2">
                 {customer.nodosCount} nodos
               </span>
@@ -59,22 +121,12 @@ export function CustomerAccordionItem({
             <>
               {/* Información básica */}
               <div className="mb-3">
-                <p className="mb-1">
-                  <strong>Usuario:</strong> {detail.username}
-                </p>
-                <p className="mb-1">
-                  <strong>Estado:</strong>{" "}
-                  <span
-                    className={`badge ${
-                      detail.isActive ? "bg-success" : "bg-secondary"
-                    }`}
-                  >
-                    {detail.isActive ? "Activo" : "Inactivo"}
-                  </span>
-                </p>
                 <p className="mb-0">
                   <small className="text-muted">
-                    Creado: {new Date(detail.createdAt).toLocaleDateString()}
+                    Creado: {new Date(detail.createdAt).toLocaleDateString()}{" "}
+                    {" | "}
+                    Actualizado:{" "}
+                    {new Date(detail.updatedAt).toLocaleDateString()}
                   </small>
                 </p>
               </div>
@@ -90,7 +142,7 @@ export function CustomerAccordionItem({
                       data-bs-target={`#operatorsCollapse-${customer.id}`}
                       aria-expanded="false"
                     >
-                      <strong>Operadores</strong>
+                      <strong>Operadores asignados</strong>
                       <span className="badge bg-warning ms-2">
                         {detail.operators.length}
                       </span>
@@ -108,33 +160,67 @@ export function CustomerAccordionItem({
                         </p>
                       ) : (
                         <div className="list-group">
-                          {detail.operators.map((op) => (
-                            <div
-                              key={op.id}
-                              className="list-group-item list-group-item-action"
-                            >
-                              <div className="d-flex w-100 justify-content-between">
-                                <h6 className="mb-1">{op.operator.fullName}</h6>
-                                <small className="text-muted">
-                                  {op.operator.username}
+                          {detail.operators.map((op) => {
+                            const opStatus = getOperatorStatus(
+                              op.operator.id,
+                              op.operator.isActive
+                            );
+                            const isUpdating =
+                              updatingOperator === op.operator.id;
+                            return (
+                              <div
+                                key={op.id}
+                                className="list-group-item list-group-item-action customer-operator-item"
+                              >
+                                <div className="d-flex w-100 justify-content-between">
+                                  <h6 className="mb-1">
+                                    {op.operator.fullName}
+                                  </h6>
+                                  <div className="d-flex align-items-center gap-2">
+                                    <small className="text-muted">
+                                      {op.operator.username}
+                                    </small>
+                                    <button
+                                      type="button"
+                                      className={`badge ms-2 border-0 status-toggle-btn ${
+                                        opStatus ? "bg-success" : "bg-secondary"
+                                      } ${isUpdating ? "status-updating" : ""}`}
+                                      style={{
+                                        minWidth: 70,
+                                        fontSize: "0.75rem",
+                                      }}
+                                      onClick={() =>
+                                        handleOperatorStatusToggle(
+                                          op.operator.id,
+                                          opStatus
+                                        )
+                                      }
+                                      disabled={isUpdating}
+                                      title={`Clic para ${
+                                        opStatus ? "desactivar" : "activar"
+                                      }`}
+                                    >
+                                      {opStatus ? "Activo" : "Inactivo"}
+                                    </button>
+                                  </div>
+                                </div>
+                                <p className="mb-1">
+                                  <strong>Email:</strong> {op.operator.email}
+                                </p>
+                                <small
+                                  className={
+                                    op.operator.hasChangedPassword
+                                      ? "text-success"
+                                      : "text-warning"
+                                  }
+                                >
+                                  {op.operator.hasChangedPassword
+                                    ? "✓ Contraseña actualizada"
+                                    : "⚠ Contraseña pendiente"}
                                 </small>
                               </div>
-                              <p className="mb-1">
-                                <strong>Email:</strong> {op.operator.email}
-                              </p>
-                              <small
-                                className={
-                                  op.operator.hasChangedPassword
-                                    ? "text-success"
-                                    : "text-warning"
-                                }
-                              >
-                                {op.operator.hasChangedPassword
-                                  ? "✓ Contraseña actualizada"
-                                  : "⚠ Contraseña pendiente"}
-                              </small>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       )}
                     </div>
@@ -153,7 +239,7 @@ export function CustomerAccordionItem({
                       data-bs-target={`#nodosCollapse-${customer.id}`}
                       aria-expanded="false"
                     >
-                      <strong>Nodos</strong>
+                      <strong>Nodos asignados</strong>
                       <span className="badge bg-info ms-2">
                         {detail.nodos.length}
                       </span>
